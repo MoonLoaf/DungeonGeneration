@@ -1,0 +1,6 @@
+CubeCount: 4216851
+Square Pants: 430
+Square Squared: 80
+Squire: 176
+Square Phoenix: 70
+Square Space: 70
