@@ -5,26 +5,25 @@
 #include <string>
 #include <vector>
 
-#include "Utilities/Consts.h"
-#include "Utilities/SDLUtils.h"
-#include "Utilities/SpriteUtils.h"
-#include "Window/Window.h"
-
-using namespace std;
+#include "src/Grid.h"
+#include "src/Tile.h"
+#include "utils/Consts.h"
+#include "utils/SDLUtils.h"
+#include "utils/SpriteUtils.h"
+#include "window/Window.h"
 
 int main(int argc, char* args[])
 {
     SDLUtils::InitializeSDL();
     
     // Create Window and Renderer
-    const unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, NOKIA_GREEN ,"Dungeon Generation"));
+    const std::unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, NOKIA_GREEN ,"Dungeon Generation"));
     SDL_Surface* spriteSheet = IMG_Load(IMG_TILES_URL);
     // Load image
-    std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 5, 5, 8, 8);
-
-    SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(game_window->renderer, images[1]);
-
-    SDL_FreeSurface(images[1]);
+    const std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 5, 5, 8, 8);
+    
+    Grid grid(25, 25, WINDOW_WIDTH / 25, WINDOW_HEIGHT / 25, game_window->renderer, images);
+    grid.Initialize();
     
     SDL_Event e;
     bool quit = false;
@@ -48,9 +47,12 @@ int main(int argc, char* args[])
         
         game_window->Clear();
 
-        // Render all active game objects
-        SDL_Rect rect = {WINDOW_CENTER_X, WINDOW_CENTER_Y, 64, 64};
-        SDL_RenderCopy(game_window->renderer, imageTexture, NULL, &rect);
+        // Render all tiles in the grid
+        for (std::vector<Tile>& row : grid.GetGridTiles()) {
+            for (Tile& tile : row) {
+                SDL_RenderCopy(game_window->renderer, tile.GetTexture(), nullptr, tile.GetRect());
+            }
+        }
 
         game_window->Present();
 
