@@ -3,7 +3,7 @@
 #include <utility>
 #include "../utils/Consts.h"
 
-Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* renderer, std::vector<SDL_Surface*> images)
+Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* renderer, std::vector<SDL_Surface*> images, int inXOffset, int inYOffset)
 {
     Width = width;
     Height = height;
@@ -11,6 +11,10 @@ Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* r
     TileHeight = tileHeight;
     Renderer = renderer;
     Sprites = std::move(images);
+
+    xOffset = inXOffset;
+    yOffset = inYOffset;
+    
 }
 
 void Grid::Initialize()
@@ -22,7 +26,7 @@ void Grid::Initialize()
         GridTiles[i].reserve(Height);
 
         for (int j = 0; j < Height; ++j) {
-            vector2 position(i * TileWidth, j * TileHeight);
+            vector2 position(i * TileWidth + xOffset, j * TileHeight + yOffset);
             vector2 scale(TileWidth, TileHeight);
             TileType tileType = TileType::Ground;  // Replace with your desired tile type
             const int randomIndex = rand() % Sprites.size(); 
