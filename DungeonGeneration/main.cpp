@@ -7,6 +7,7 @@
 
 #include "Utilities/Consts.h"
 #include "Utilities/SDLUtils.h"
+#include "Utilities/SpriteUtils.h"
 #include "Window/Window.h"
 
 using namespace std;
@@ -16,19 +17,14 @@ int main(int argc, char* args[])
     SDLUtils::InitializeSDL();
     
     // Create Window and Renderer
-    const unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE ,"Dungeon Generation"));
-    
+    const unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, NOKIA_GREEN ,"Dungeon Generation"));
+    SDL_Surface* spriteSheet = IMG_Load(IMG_TILES_URL);
     // Load image
-    SDL_Surface* imageSurface = IMG_Load(IMG_TILES_URL);
-    if (!imageSurface) {
-        // Handle error if image loading fails
-        cerr << "Failed to load image: " << IMG_GetError() << endl;
-        return 1;
-    }
+    std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 5, 5, 8, 8);
 
-    SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(game_window->renderer, imageSurface);
+    SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(game_window->renderer, images[1]);
 
-    SDL_FreeSurface(imageSurface);
+    SDL_FreeSurface(images[1]);
     
     SDL_Event e;
     bool quit = false;
@@ -53,7 +49,8 @@ int main(int argc, char* args[])
         game_window->Clear();
 
         // Render all active game objects
-        SDL_RenderCopy(game_window->renderer, imageTexture, NULL, NULL);
+        SDL_Rect rect = {WINDOW_CENTER_X, WINDOW_CENTER_Y, 64, 64};
+        SDL_RenderCopy(game_window->renderer, imageTexture, NULL, &rect);
 
         game_window->Present();
 

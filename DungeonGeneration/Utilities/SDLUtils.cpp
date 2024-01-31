@@ -8,6 +8,7 @@
 void SDLUtils::InitializeSDL()
 {
     // initialize SDL_Image for image loading
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags))
     {

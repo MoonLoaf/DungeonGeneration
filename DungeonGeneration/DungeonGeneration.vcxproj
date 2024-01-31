@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utilities\SDLUtils.cpp" />
+    <ClCompile Include="Utilities\SpriteUtils.cpp" />
     <ClCompile Include="Window\Window.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -117,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="Utilities\Consts.h" />
     <ClInclude Include="Utilities\SDLUtils.h" />
+    <ClInclude Include="Utilities\SpriteUtils.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
