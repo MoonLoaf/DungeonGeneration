@@ -59,8 +59,6 @@ void Grid::GenerateRoom() {
     // Assign tiles to the room
     for (int i = roomX; i < roomX + roomWidth; ++i) {
         for (int j = roomY; j < roomY + roomHeight; ++j) {
-            const vector2 position(i * TileWidth + xOffset, j * TileHeight + yOffset);
-            const vector2 scale(TileWidth, TileHeight);
             TileType tileType;
 
             if (i == roomX && j == roomY) {
