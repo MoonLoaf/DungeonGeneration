@@ -17,13 +17,13 @@ int main(int argc, char* args[])
     SDLUtils::InitializeSDL();
     
     // Create Window and Renderer
-    const std::unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, NOKIA_GREEN ,"Dungeon Generation"));
+    const std::unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, BLACK ,"Dungeon Generation"));
     SDL_Surface* spriteSheet = IMG_Load(IMG_TILES_URL);
     // Load image
     const std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 5, 5, 8, 8);
     
-    Grid grid(25, 25, WINDOW_WIDTH / 25, WINDOW_HEIGHT / 25, game_window->renderer, images, 10, 10);
-    grid.Initialize();
+    Grid grid(60, 60, WINDOW_WIDTH / 60, WINDOW_HEIGHT / 60, game_window->renderer, images, 2, 10);
+    grid.Initialize(8);
     
     SDL_Event e;
     bool quit = false;

@@ -9,11 +9,14 @@ class Grid
 public:
     Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* renderer, std::vector<SDL_Surface*> images, int inXOffset, int inYOffset);
 
-    void Render() const;
-
-    void Initialize();
+    void Initialize(int rooms);
     
+    void GenerateRoom();
+    
+    bool IsRoomOverlap(int x, int y, int width, int height) const;
+
     std::vector<std::vector<Tile>> GetGridTiles();
+    int getRandom(int min, int max);
 private:
 
     int Width;

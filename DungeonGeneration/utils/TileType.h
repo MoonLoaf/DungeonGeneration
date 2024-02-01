@@ -5,4 +5,5 @@ enum class TileType
     Ground,
     Wall,
     Door,
+    None,
 };
