@@ -177,6 +177,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\TileLocation.cpp" />
     <ClCompile Include="utils\SDLUtils.cpp" />
     <ClCompile Include="utils\SpriteUtils.cpp" />
     <ClCompile Include="utils\TileType.cpp" />
@@ -270,14 +271,17 @@
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Tile.h" />
+    <ClInclude Include="src\TileLocation.h" />
     <ClInclude Include="utils\Consts.h" />
     <ClInclude Include="utils\SDLUtils.h" />
     <ClInclude Include="utils\SpriteUtils.h" />
+    <ClInclude Include="utils\TileMappings.h" />
     <ClInclude Include="utils\TileType.h" />
     <ClInclude Include="utils\Vector2.h" />
     <ClInclude Include="window\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\img\8x8.png" />
     <Content Include="assets\img\tiles.png" />
     <Content Include="fonts\futuramedium.ttf" />
     <Content Include="fonts\lazy.ttf" />

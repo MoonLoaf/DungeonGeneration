@@ -17,4 +17,4 @@ constexpr SDL_Color GREEN {0, 255, 0};
 constexpr SDL_Color PINK {255, 0, 255};
 constexpr SDL_Color NOKIA_GREEN{67, 82, 61};
 
-const char* const IMG_TILES_URL{ "assets/img/tiles.png" };
+const char* const IMG_TILES_URL{ "assets/img/8x8.png" };

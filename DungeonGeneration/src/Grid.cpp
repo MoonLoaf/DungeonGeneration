@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "../utils/TileMappings.h"
 
 #include <random>
 #include <utility>
@@ -31,7 +32,7 @@ void Grid::Initialize(int rooms)
             vector2 position(i * TileWidth + xOffset, j * TileHeight + yOffset);
             vector2 scale(TileWidth, TileHeight);
             TileType tileType = TileType::None;
-            GridTiles[i].emplace_back(position, scale, Sprites[23], Renderer, tileType);
+            GridTiles[i].emplace_back(position, scale, Sprites[9], Renderer, tileType);
         }
     }
 
@@ -42,8 +43,8 @@ void Grid::Initialize(int rooms)
 }
 
 void Grid::GenerateRoom() {
-    const int minRoomSize = 5;
-    const int maxRoomSize = 15;
+    constexpr int minRoomSize = 5;
+    constexpr int maxRoomSize = 15;
 
     const int roomWidth = getRandom(minRoomSize, maxRoomSize);
     const int roomHeight = getRandom(minRoomSize, maxRoomSize);
@@ -55,28 +56,51 @@ void Grid::GenerateRoom() {
         roomY = getRandom(0, Height - roomHeight);
     } while (IsRoomOverlap(roomX, roomY, roomWidth, roomHeight));
 
-    // Assign ground tiles to the room
+    // Assign tiles to the room
     for (int i = roomX; i < roomX + roomWidth; ++i) {
         for (int j = roomY; j < roomY + roomHeight; ++j) {
             const vector2 position(i * TileWidth + xOffset, j * TileHeight + yOffset);
             const vector2 scale(TileWidth, TileHeight);
             TileType tileType;
 
-            // Assign ground tiles (Sprites[0-2]) to the inner part of the room
-            if (i > roomX && i < roomX + roomWidth - 1 && j > roomY && j < roomY + roomHeight - 1) {
-                const int randomIndex = getRandom(0, 1);
+            if (i == roomX && j == roomY) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[TOP_LEFT_CORNER_SPRITE]);
+            } else if (i == roomX + roomWidth - 1 && j == roomY) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[TOP_RIGHT_CORNER_SPRITE]);
+            } else if (i == roomX && j == roomY + roomHeight - 1) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[BOTTOM_LEFT_CORNER_SPRITE]);
+            } else if (i == roomX + roomWidth - 1 && j == roomY + roomHeight - 1) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[BOTTOM_RIGHT_CORNER_SPRITE]);
+            } else if (j == roomY) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[TOP_WALL_SPRITE]);
+            } else if (j == roomY + roomHeight - 1) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[BOTTOM_WALL_SPRITE]);
+            } else if (i == roomX) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[LEFT_SIDE_WALL_SPRITE]);
+            } else if (i == roomX + roomWidth - 1) {
+                tileType = TileType::Wall;
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[RIGHT_SIDE_WALL_SPRITE]);
+            } else {
+                // Inner part of the room
+                const int randomIndex = getRandom(6, 7);
                 tileType = TileType::Ground;
-                GridTiles[i][j] = Tile(position, scale, Sprites[randomIndex], Renderer, tileType);
-            }
-            // Assign top wall tiles (Sprites[3]) to the top row of the room TODO: Need to account for l and r side of room
-            else if (j == roomY) {
-                tileType = TileType::Wall;
-                GridTiles[i][j] = Tile(position, scale, Sprites[3], Renderer, tileType);
-            }
-            // Assign side wall tiles (Sprites[9]) to the sides of the room //TODO: also needs l and r specific sprites
-            else if (i == roomX || i == roomX + roomWidth - 1) {
-                tileType = TileType::Wall;
-                GridTiles[i][j] = Tile(position, scale, Sprites[9], Renderer, tileType);
+                GridTiles[i][j].SetTileType(tileType);
+                GridTiles[i][j].SetTexture(Sprites[randomIndex]);
             }
         }
     }
@@ -99,6 +123,6 @@ std::vector<std::vector<Tile>> Grid::GetGridTiles()
     return GridTiles;
 }
 
-int Grid::getRandom(int min, int max) {
+int Grid::getRandom(const int min, const int max) {
     return min + rand() % (max - min + 1);
 }
