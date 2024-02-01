@@ -45,8 +45,8 @@ void Grid::GenerateRoom() {
     const int minRoomSize = 5;
     const int maxRoomSize = 15;
 
-    int roomWidth = getRandom(minRoomSize, maxRoomSize);
-    int roomHeight = getRandom(minRoomSize, maxRoomSize);
+    const int roomWidth = getRandom(minRoomSize, maxRoomSize);
+    const int roomHeight = getRandom(minRoomSize, maxRoomSize);
 
     int roomX, roomY;
     do {
