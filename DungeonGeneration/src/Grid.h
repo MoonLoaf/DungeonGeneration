@@ -2,6 +2,7 @@
 #include <SDL_render.h>
 #include <vector>
 
+#include "Room.h"
 #include "Tile.h"
 
 class Grid
@@ -13,6 +14,8 @@ public:
     
     void GenerateRoom();
     
+    void GenerateCorridors();
+
     bool IsRoomOverlap(int x, int y, int width, int height) const;
 
     std::vector<std::vector<Tile>> GetGridTiles();
@@ -30,5 +33,6 @@ private:
     
     std::vector<std::vector<Tile>> GridTiles;
     std::vector<SDL_Surface*> Sprites;
+    std::vector<Room> Rooms;
     
 };

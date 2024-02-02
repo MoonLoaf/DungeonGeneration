@@ -4,6 +4,8 @@
 #include <random>
 #include <utility>
 
+#include "Room.h"
+
 Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* renderer, std::vector<SDL_Surface*> images, int inXOffset, int inYOffset)
 {
     Width = width;
@@ -45,6 +47,8 @@ void Grid::Initialize(int rooms)
 void Grid::GenerateRoom() {
     constexpr int minRoomSize = 5;
     constexpr int maxRoomSize = 15;
+
+    RoomType type = RoomType::Normal;
 
     const int roomWidth = getRandom(minRoomSize, maxRoomSize);
     const int roomHeight = getRandom(minRoomSize, maxRoomSize);
@@ -102,6 +106,11 @@ void Grid::GenerateRoom() {
             }
         }
     }
+}
+
+void Grid::GenerateCorridors()
+{
+    
 }
 
 bool Grid::IsRoomOverlap(int x, int y, int width, int height) const {

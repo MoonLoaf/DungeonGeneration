@@ -17,7 +17,7 @@ int main(int argc, char* args[])
     SDLUtils::InitializeSDL();
     
     // Create Window and Renderer
-    const std::unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, BLACK ,"Dungeon Generation"));
+    const std::unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, DEEP_PURPLE ,"Dungeon Generation"));
     SDL_Surface* spriteSheet = IMG_Load(IMG_TILES_URL);
     // Load image
     const std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 12, 8, 8, 8);
