@@ -15,6 +15,8 @@ public:
     void SetRoomType(RoomType type);
 
     RoomType GetRoomType() const;
+
+    Tile* GetRandomTile();
     
 private:
 

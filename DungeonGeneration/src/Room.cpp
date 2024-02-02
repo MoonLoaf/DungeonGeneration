@@ -22,3 +22,14 @@ RoomType Room::GetRoomType() const
 {
     return Type;
 }
+
+Tile* Room::GetRandomTile()
+{
+    if (!RoomTiles.empty()) {
+        const int r = rand() % RoomTiles.size();
+        return RoomTiles[r];
+    } else {
+        // Handle the case when RoomTiles is empty (return nullptr or handle accordingly)
+        return nullptr;
+    }
+}

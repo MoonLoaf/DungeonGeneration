@@ -9,3 +9,4 @@ constexpr int TOP_WALL_SPRITE = 1;
 constexpr int BOTTOM_WALL_SPRITE = 17;
 constexpr int LEFT_SIDE_WALL_SPRITE = 8;
 constexpr int RIGHT_SIDE_WALL_SPRITE = 10;
+constexpr int GROUND = 7;
