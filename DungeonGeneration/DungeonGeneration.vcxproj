@@ -179,9 +179,9 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\TileLocation.cpp" />
+    <ClCompile Include="utils\random.cpp" />
     <ClCompile Include="utils\SDLUtils.cpp" />
     <ClCompile Include="utils\SpriteUtils.cpp" />
-    <ClCompile Include="utils\TileType.cpp" />
     <ClCompile Include="utils\Vector2.cpp" />
     <ClCompile Include="window\Window.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -275,6 +275,7 @@
     <ClInclude Include="src\Tile.h" />
     <ClInclude Include="src\TileLocation.h" />
     <ClInclude Include="utils\Consts.h" />
+    <ClInclude Include="utils\Random.h" />
     <ClInclude Include="utils\RoomType.h" />
     <ClInclude Include="utils\SDLUtils.h" />
     <ClInclude Include="utils\SpriteUtils.h" />

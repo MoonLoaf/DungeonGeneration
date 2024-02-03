@@ -23,7 +23,7 @@ int main(int argc, char* args[])
     const std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 12, 8, 8, 8);
     
     Grid grid(60, 60, WINDOW_WIDTH / 60, WINDOW_HEIGHT / 60, game_window->renderer, images, 2, 10);
-    grid.Initialize(8);
+    grid.Initialize(9);
     
     SDL_Event e;
     bool quit = false;

@@ -1,6 +1,5 @@
 #pragma once
 #include <SDL_render.h>
-#include <stack>
 #include <vector>
 
 #include "Room.h"
@@ -13,18 +12,21 @@ public:
 
     void Initialize(int rooms);
     
-    void GenerateRoom();
+    void GenerateRoom(const int minRoomSize, const int maxRoomSize);
     void ConnectRooms();
 
     bool IsRoomOverlap(int x, int y, int width, int height) const;
-
-    int getRandom(int min, int max);
 
     std::vector<std::vector<Tile>> GetGridTiles();
     
 private:
     void ConnectTwoRooms(Room* room1, Room* room2);
-    bool IsValidPosition(int x, int y);
+    void GenerateDoors() const;
+    Room* GetRoomWithMinX() const;
+    Room* GetRoomWithMaxX() const;
+    Room* GetRoomWithMinY() const;
+    Room* GetRoomWithMaxY() const;
+    bool IsValidPosition(int x, int y) const;
 
     int Width;
     int Height;

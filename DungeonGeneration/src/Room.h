@@ -16,11 +16,25 @@ public:
 
     RoomType GetRoomType() const;
 
-    Tile* GetRandomTile();
+    Tile* GetRandomInnerTile() const;
+    
+    int GetMinX() const;
+    int GetMaxX() const;
+    int GetMinY() const;
+    int GetMaxY() const;
+
+    Tile* GetRandomWallTile() const;
+
+    bool IsCornerTile(Tile* tile) const;
+
+    void SetIsConnected(bool connected);
+
+    bool GetIsConnected() const;
     
 private:
-
     std::vector<Tile*> RoomTiles;
     
     RoomType Type;
+
+    bool IsConnected;
 };
