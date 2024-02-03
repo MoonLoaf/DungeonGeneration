@@ -43,7 +43,7 @@ void Grid::Initialize(int rooms)
     {
         GenerateRoom();
     }
-    GenerateCorridors();
+    ConnectRooms();
 }
 
 void Grid::GenerateRoom() {
@@ -122,116 +122,36 @@ void Grid::GenerateRoom() {
     Rooms.push_back(newRoom);
 }
 
-void Grid::GenerateCorridors()
-{
-    // Check if there are enough rooms to connect
-    if (Rooms.size() < 2) {
-        return;
-    }
-
-    for (size_t i = 0; i < Rooms.size() - 1; i++)
-    {
-        // Connect each room to the next one
-        ConnectRooms(Rooms[i], Rooms[i + 1]);
+void Grid::ConnectRooms() {
+    for (size_t i = 0; i < Rooms.size() - 1; ++i) {
+        ConnectTwoRooms(Rooms[i], Rooms[i + 1]);
     }
 }
 
-void Grid::ConnectRooms(Room* room1, Room* room2)
-{
-    // Choose a random tile from each room
-    const Tile* tile1 = room1->GetRandomTile();
-    const Tile* tile2 = room2->GetRandomTile();
+void Grid::ConnectTwoRooms(Room* room1, Room* room2) {
+    Tile* tile1 = room1->GetRandomTile();
+    Tile* tile2 = room2->GetRandomTile();
 
-    // Use DFS to connect the chosen tiles
-    std::vector<std::vector<bool>> corridorMatrix(Width, std::vector<bool>(Height, false));
-    ConnectTilesDFS(tile1->GetGridPos(), tile2->GetGridPos(), corridorMatrix);
-}
+    vector2 startPos = tile1->GetGridPos();
+    vector2 endPos = tile2->GetGridPos();
 
-void Grid::ConnectTilesDFS(const vector2& start, const vector2& end, std::vector<std::vector<bool>>& corridorMatrix)
-{
-    std::vector<std::vector<int>> distances(Width, std::vector<int>(Height, -1));
-    std::vector<std::vector<vector2>> previous(Width, std::vector<vector2>(Height, { -1, -1 }));
-
-    // Set the distance of the start position to 0
-    distances[start.x][start.y] = 0;
-
-    RecursiveDFS(start, end, corridorMatrix, distances, previous);
-}
-
-
-void Grid::RecursiveDFS(const vector2& current, const vector2& end, std::vector<std::vector<bool>>& corridorMatrix, std::vector<std::vector<int>>& distances, std::vector<std::vector<vector2>>& previous)
-{
-    if (current == end)
-    {
-        // Reconstruct the path
-        std::vector<vector2> path;
-        vector2 temp = end;
-
-        while (temp != vector2{-1, -1})
-        {
-            path.push_back(temp);
-            temp = previous[temp.x][temp.y];
+    // Simple pathfinding using a straight line (you can replace this with a more sophisticated algorithm if needed)
+    while (startPos != endPos) {
+        if (startPos.x < endPos.x) {
+            startPos.x++;
+        } else if (startPos.x > endPos.x) {
+            startPos.x--;
+        } else if (startPos.y < endPos.y) {
+            startPos.y++;
+        } else if (startPos.y > endPos.y) {
+            startPos.y--;
         }
 
-        // Update sprites for the path
-        for (const auto& pos : path)
-        {
-            GridTiles[pos.x][pos.y].SetTileType(TileType::Ground);
-            GridTiles[pos.x][pos.y].SetTexture(Sprites[GROUND]);
-        }
-
-        return;
-    }
-
-    if (corridorMatrix[current.x][current.y])
-    {
-        return; // Already part of the corridor
-    }
-
-    // Mark the tile as part of the corridor
-    corridorMatrix[current.x][current.y] = true;
-
-    // Update distances and previous for neighbors
-    UpdateNeighbors(distances, previous, current);
-
-    // Continue DFS for neighbors
-    const int x = current.x;
-    const int y = current.y;
-
-    const std::vector<vector2> neighbors = {
-        {x - 1, y},
-        {x + 1, y},
-        {x, y - 1},
-        {x, y + 1}
-    };
-
-    for (const auto& neighbor : neighbors)
-    {
-        if (IsValidPosition(neighbor.x, neighbor.y) && distances[neighbor.x][neighbor.y] == -1)
-        {
-            RecursiveDFS(neighbor, end, corridorMatrix, distances, previous);
-        }
-    }
-}
-
-void Grid::UpdateNeighbors(std::vector<std::vector<int>>& distances, std::vector<std::vector<vector2>>& previous, const vector2& current)
-{
-    const int x = current.x;
-    const int y = current.y;
-
-    const std::vector<vector2> neighbors = {
-        {x - 1, y},
-        {x + 1, y},
-        {x, y - 1},
-        {x, y + 1}
-    };
-
-    for (const auto& neighbor : neighbors)
-    {
-        if (IsValidPosition(neighbor.x, neighbor.y) && distances[neighbor.x][neighbor.y] == -1)
-        {
-            distances[neighbor.x][neighbor.y] = distances[x][y] + 1;
-            previous[neighbor.x][neighbor.y] = current;
+        TileType tileType = GridTiles[startPos.x][startPos.y].GetTileType();
+        if (tileType == TileType::None) {
+            GridTiles[startPos.x][startPos.y].SetTileType(TileType::Ground);
+            GridTiles[startPos.x][startPos.y].SetTexture(Sprites[GROUND]);
+            
         }
     }
 }
