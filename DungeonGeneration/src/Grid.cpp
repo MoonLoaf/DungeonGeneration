@@ -1,5 +1,4 @@
 #include <random>
-#include <utility>
 
 #include "Grid.h"
 #include "../utils/TileMappings.h"
@@ -13,7 +12,7 @@ Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* r
     TileWidth = tileWidth;
     TileHeight = tileHeight;
     Renderer = renderer;
-    Sprites = std::move(images);
+    Sprites = std::make_shared<std::vector<SDL_Surface*>>(images);
 
     xOffset = inXOffset;
     yOffset = inYOffset;
@@ -34,7 +33,7 @@ void Grid::Initialize(int rooms)
             vector2 position {i * TileWidth + xOffset, j * TileHeight + yOffset};
             vector2 scale {TileWidth, TileHeight};
             TileType tileType = TileType::None;
-            GridTiles[i].emplace_back(position, scale, Sprites[9], Renderer, tileType, vector2{i, j});
+            GridTiles[i].emplace_back(position, scale, Sprites->at(9), Renderer, tileType, vector2{i, j});
         }
     }
 
@@ -48,17 +47,17 @@ void Grid::Initialize(int rooms)
 
 void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
 
-    RoomType type = RoomType::Normal;
+    RoomType type = DecideRoomType();
     std::vector<Tile*> roomTiles;
 
-    const int roomWidth = Random::GetRandom(minRoomSize, maxRoomSize);
-    const int roomHeight = Random::GetRandom(minRoomSize, maxRoomSize);
+    const int roomWidth = Random::GetRandomRange(minRoomSize, maxRoomSize);
+    const int roomHeight = Random::GetRandomRange(minRoomSize, maxRoomSize);
 
     int roomX, roomY;
     do {
         // Generate a random position for the top-left corner of the room
-        roomX = Random::GetRandom(0, Width - roomWidth);
-        roomY = Random::GetRandom(0, Height - roomHeight);
+        roomX = Random::GetRandomRange(0, Width - roomWidth);
+        roomY = Random::GetRandomRange(0, Height - roomHeight);
     } while (IsRoomOverlap(roomX, roomY, roomWidth, roomHeight));
 
     // Assign tiles to the room
@@ -67,47 +66,48 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
 
             if (i == roomX && j == roomY) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[TOP_LEFT_CORNER_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(TOP_LEFT_CORNER_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX + roomWidth - 1 && j == roomY) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[TOP_RIGHT_CORNER_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(TOP_RIGHT_CORNER_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX && j == roomY + roomHeight - 1) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[BOTTOM_LEFT_CORNER_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(BOTTOM_LEFT_CORNER_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX + roomWidth - 1 && j == roomY + roomHeight - 1) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[BOTTOM_RIGHT_CORNER_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(BOTTOM_RIGHT_CORNER_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (j == roomY) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[TOP_WALL_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(TOP_WALL_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (j == roomY + roomHeight - 1) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[BOTTOM_WALL_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(BOTTOM_WALL_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[LEFT_SIDE_WALL_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(LEFT_SIDE_WALL_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX + roomWidth - 1) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites[RIGHT_SIDE_WALL_SPRITE]);
+                GridTiles[i][j].SetTexture(Sprites->at(RIGHT_SIDE_WALL_SPRITE));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else {
                 // Inner part of the room
-                const int randomIndex = Random::GetRandom(6, 7);
+                const int randomIndex = Random::GetRandomRange(6, 7);
                 GridTiles[i][j].SetTileType(TileType::Ground);
-                GridTiles[i][j].SetTexture(Sprites[randomIndex]);
+                GridTiles[i][j].SetTexture(Sprites->at(randomIndex));
                 roomTiles.push_back(&GridTiles[i][j]);
             }
         }
     }
-    Room* newRoom = new Room(roomTiles, type);
+    Room* newRoom = new Room(roomTiles, type, Sprites);
     Rooms.push_back(newRoom);
+    newRoom->DecorateRoom();
 }
 
 void Grid::ConnectRooms() {
@@ -123,7 +123,7 @@ void Grid::ConnectTwoRooms(Room* room1, Room* room2) {
     vector2 startPos = tile1->GetGridPos();
     vector2 endPos = tile2->GetGridPos();
 
-    // Simple pathfinding using a straight line (you can replace this with a more sophisticated algorithm if needed)
+    // Simple pathfinding using a straight line
     std::vector<vector2> path;
     vector2 currentPos = startPos;
     while (currentPos != endPos) {
@@ -140,7 +140,7 @@ void Grid::ConnectTwoRooms(Room* room1, Room* room2) {
         if (IsValidPosition(currentPos.x, currentPos.y)) {
             path.push_back(currentPos);  // Add the current position to the path
             GridTiles[currentPos.x][currentPos.y].SetTileType(TileType::Ground);
-            GridTiles[currentPos.x][currentPos.y].SetTexture(Sprites[GROUND]);
+            GridTiles[currentPos.x][currentPos.y].SetTexture(Sprites->at(GROUND));
         } else {
             // If the current position is out of bounds, break the loop
             break;
@@ -156,7 +156,7 @@ void Grid::ConnectTwoRooms(Room* room1, Room* room2) {
 
                 if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::None) {
                     GridTiles[x][y].SetTileType(TileType::Wall);
-                    GridTiles[x][y].SetTexture(Sprites[24]);  // Replace WALL_SPRITE with the appropriate index
+                    GridTiles[x][y].SetTexture(Sprites->at(24));
                 }
             }
         }
@@ -166,7 +166,7 @@ void Grid::ConnectTwoRooms(Room* room1, Room* room2) {
 void Grid::GenerateDoors() const
 {
     // Choose whether to connect rooms with highest and lowest X or Y values
-    bool connectByX = Random::GetRandom(0, 1) == 0;
+    bool connectByX = Random::GetRandomRange(0, 1) == 0;
 
     // Find rooms with highest and lowest X or Y values
     Room* room1;
@@ -186,10 +186,10 @@ void Grid::GenerateDoors() const
 
     if (doorTile1 && doorTile2) {
         doorTile1->SetTileType(TileType::Door);
-        doorTile1->SetTexture(Sprites[DOOR_1]);  // Replace DOOR_SPRITE with the appropriate index
+        doorTile1->SetTexture(Sprites->at(DOOR_1)); 
 
         doorTile2->SetTileType(TileType::Door);
-        doorTile2->SetTexture(Sprites[DOOR_2]);  // Replace DOOR_SPRITE with the appropriate index
+        doorTile2->SetTexture(Sprites->at(DOOR_2));
     }
 }
 
@@ -233,7 +233,26 @@ Room* Grid::GetRoomWithMaxY() const {
     return roomMaxY;
 }
 
-
+RoomType Grid::DecideRoomType() {
+    // Generate at least one Boss room
+    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
+        return room->GetRoomType() == RoomType::Boss;
+    })) {
+        return RoomType::Boss;
+    }
+    // Generate at least one Pickup room
+    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
+        return room->GetRoomType() == RoomType::Pickup;
+    })) {
+        return RoomType::Pickup;
+    }
+    // 25% chance for any other room to be Boss or Pickup
+    if (Random::GetRandomRange(1, 100) <= 25) {
+        return Random::GetRandomRange(1, 2) == 1 ? RoomType::Boss : RoomType::Pickup;
+    }
+    // Else normal room
+    return RoomType::Normal;
+}
 
 bool Grid::IsValidPosition(const int x, const int y) const
 {

@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 
 #include "Tile.h"
@@ -8,7 +9,7 @@ class Room
 {
 public:
 
-    Room(std::vector<Tile*> tiles, RoomType type);
+    Room(std::vector<Tile*> tiles, RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images);
 
     std::vector<Tile*> GetRoomTiles();
 
@@ -30,11 +31,21 @@ public:
     void SetIsConnected(bool connected);
 
     bool GetIsConnected() const;
-    
+
+    void DecorateRoom();
+
 private:
+
+    //Room specific decoration functions
+    void DecorateNormalRoom();
+    void DecorateBossRoom();
+    void DecoratePickupRoom();
+    
     std::vector<Tile*> RoomTiles;
     
     RoomType Type;
 
     bool IsConnected;
+
+    std::shared_ptr<std::vector<SDL_Surface*>> Sprites;
 };

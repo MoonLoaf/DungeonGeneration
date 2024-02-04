@@ -3,5 +3,5 @@
 class Random
 {
 public:
-    static int GetRandom(const int min, const int max);
+    static int GetRandomRange(const int min, const int max);
 };

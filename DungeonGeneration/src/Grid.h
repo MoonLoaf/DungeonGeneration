@@ -27,6 +27,7 @@ private:
     Room* GetRoomWithMinY() const;
     Room* GetRoomWithMaxY() const;
     bool IsValidPosition(int x, int y) const;
+    RoomType DecideRoomType();
 
     int Width;
     int Height;
@@ -38,7 +39,6 @@ private:
     SDL_Renderer* Renderer;
     
     std::vector<std::vector<Tile>> GridTiles;
-    std::vector<SDL_Surface*> Sprites;
+    std::shared_ptr<std::vector<SDL_Surface*>> Sprites;
     std::vector<Room*> Rooms;
-    
 };
