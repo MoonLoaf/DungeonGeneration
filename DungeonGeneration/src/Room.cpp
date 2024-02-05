@@ -51,7 +51,7 @@ Tile* Room::GetRandomWallTile() const
     return nullptr;  // No eligible wall tiles found
 }
 
-bool Room::IsCornerTile(Tile* tile) const
+bool Room::IsCornerTile(const Tile* tile) const
 {
     // Check if the tile is one of the corner tiles
     vector2 tilePos = tile->GetGridPos();
@@ -66,7 +66,7 @@ bool Room::IsCornerTile(Tile* tile) const
            (tilePos.x == maxX && tilePos.y == maxY);
 }
 
-void Room::DecorateRoom()
+void Room::DecorateRoom() const
 {
     switch (Type) {
         case RoomType::Normal:
@@ -81,7 +81,8 @@ void Room::DecorateRoom()
     }
 }
 
-void Room::DecorateNormalRoom() {
+void Room::DecorateNormalRoom() const
+{
     int decorAmount = Random::GetRandomRange(2, 5);
 
     for (int i = 0; i < decorAmount; i++) {
@@ -109,7 +110,7 @@ void Room::DecorateNormalRoom() {
     }
 }
 
-void Room::DecorateBossRoom()
+void Room::DecorateBossRoom() const
 {
     int decorAmount = Random::GetRandomRange(1, 2);
 
@@ -138,7 +139,7 @@ void Room::DecorateBossRoom()
     }
 }
 
-void Room::DecoratePickupRoom()
+void Room::DecoratePickupRoom() const
 {
     int decorAmount = Random::GetRandomRange(1, 2);
 

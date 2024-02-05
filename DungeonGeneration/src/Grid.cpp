@@ -12,7 +12,8 @@ Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* r
     TileWidth = tileWidth;
     TileHeight = tileHeight;
     Renderer = renderer;
-    Sprites = std::make_shared<std::vector<SDL_Surface*>>(images);
+    
+    Sprites = std::make_shared<std::vector<SDL_Surface*>>(std::move(images));
 
     xOffset = inXOffset;
     yOffset = inYOffset;
@@ -39,7 +40,7 @@ void Grid::Initialize(int rooms)
 
     for (int i = 0; i < rooms; i++)
     {
-        GenerateRoom(6, 20);
+        GenerateRoom(5, 20);
     }
     ConnectRooms();
     GenerateDoors();
@@ -47,17 +48,32 @@ void Grid::Initialize(int rooms)
 
 void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
 
-    RoomType type = DecideRoomType();
-    std::vector<Tile*> roomTiles;
-
     const int roomWidth = Random::GetRandomRange(minRoomSize, maxRoomSize);
     const int roomHeight = Random::GetRandomRange(minRoomSize, maxRoomSize);
 
+    if(GridTiles.size() - roomHeight * roomWidth <= 0)
+    {
+        //Room to big to generate
+        printf("Skipped room, too many tiles");
+        return;
+    }
+    
+    RoomType type = DecideRoomType();
+    std::vector<Tile*> roomTiles;
+
     int roomX, roomY;
+    int attempts = 0;
     do {
         // Generate a random position for the top-left corner of the room
         roomX = Random::GetRandomRange(0, Width - roomWidth);
         roomY = Random::GetRandomRange(0, Height - roomHeight);
+        attempts++;
+
+        if (attempts >= 100) //Change to however many attempts is reasonable
+        {
+            printf("Skipped room, could not find non-overlapping tiles");
+            return;
+        }
     } while (IsRoomOverlap(roomX, roomY, roomWidth, roomHeight));
 
     // Assign tiles to the room
@@ -116,7 +132,7 @@ void Grid::ConnectRooms() {
     }
 }
 
-void Grid::ConnectTwoRooms(Room* room1, Room* room2) {
+void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
     Tile* tile1 = room1->GetRandomInnerTile();
     Tile* tile2 = room2->GetRandomInnerTile();
 

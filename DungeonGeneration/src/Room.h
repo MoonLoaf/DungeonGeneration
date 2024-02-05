@@ -26,20 +26,20 @@ public:
 
     Tile* GetRandomWallTile() const;
 
-    bool IsCornerTile(Tile* tile) const;
+    bool IsCornerTile(const Tile* tile) const;
 
     void SetIsConnected(bool connected);
 
     bool GetIsConnected() const;
 
-    void DecorateRoom();
+    void DecorateRoom() const;
 
 private:
 
     //Room specific decoration functions
-    void DecorateNormalRoom();
-    void DecorateBossRoom();
-    void DecoratePickupRoom();
+    void DecorateNormalRoom() const;
+    void DecorateBossRoom() const;
+    void DecoratePickupRoom() const;
     
     std::vector<Tile*> RoomTiles;
     
