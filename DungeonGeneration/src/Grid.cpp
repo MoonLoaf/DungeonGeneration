@@ -59,7 +59,7 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
         return;
     }
     
-    RoomType type = DecideRoomType();
+    const RoomType type = DecideRoomType();
     std::vector<Tile*> roomTiles;
 
     int roomX, roomY;
@@ -134,18 +134,18 @@ void Grid::ConnectRooms() {
 }
 
 void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
-    Tile* tile1 = room1->GetRandomInnerTile();
-    Tile* tile2 = room2->GetRandomInnerTile();
+    const Tile* tile1 = room1->GetRandomInnerTile();
+    const Tile* tile2 = room2->GetRandomInnerTile();
 
-    vector2 startPos = tile1->GetGridPos();
-    vector2 endPos = tile2->GetGridPos();
+    const vector2 startPos = tile1->GetGridPos();
+    const vector2 endPos = tile2->GetGridPos();
 
     // Simple pathfinding using a straight line
     std::vector<vector2> path;
     vector2 currentPos = startPos;
     while (currentPos != endPos) {
-        int dx = endPos.x - currentPos.x;
-        int dy = endPos.y - currentPos.y;
+        const int dx = endPos.x - currentPos.x;
+        const int dy = endPos.y - currentPos.y;
 
         if (std::abs(dx) > std::abs(dy)) {
             currentPos.x += (dx > 0) ? 1 : -1;
@@ -183,7 +183,7 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
 void Grid::GenerateDoors() const
 {
     // Choose whether to connect rooms with highest and lowest X or Y values
-    bool connectByX = Random::GetRandomRange(0, 1) == 0;
+    const bool connectByX = Random::GetRandomRange(0, 1) == 0;
 
     // Find rooms with highest and lowest X or Y values
     Room* room1;
