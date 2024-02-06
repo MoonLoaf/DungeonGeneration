@@ -21,12 +21,18 @@ public:
     
 private:
     void ConnectTwoRooms(const Room* room1, const Room* room2);
+    
     void GenerateDoors() const;
+
+    void DecorateOuterWorld();
+
     Room* GetRoomWithMinX() const;
     Room* GetRoomWithMaxX() const;
     Room* GetRoomWithMinY() const;
     Room* GetRoomWithMaxY() const;
+
     bool IsValidPosition(int x, int y) const;
+
     RoomType DecideRoomType();
 
     int Width;

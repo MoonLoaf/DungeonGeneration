@@ -44,6 +44,7 @@ void Grid::Initialize(int rooms)
     }
     ConnectRooms();
     GenerateDoors();
+    DecorateOuterWorld();
 }
 
 void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
@@ -208,6 +209,19 @@ void Grid::GenerateDoors() const
         doorTile2->SetTexture(Sprites->at(DOOR_2));
     }
 }
+
+void Grid::DecorateOuterWorld()
+{
+    for (int i = 0; i < Width; ++i) {
+        for (int j = 0; j < Height; ++j) {
+            if (GridTiles[i][j].GetTileType() == TileType::None && Random::GetRandomRange(1, 100) <= 4) {
+                const int r = Random::GetRandomRange(OUTER_WORLD_DECOR_START, OUTER_WORLD_DECOR_END);
+                GridTiles[i][j].SetTexture(Sprites->at(r));
+            }
+        }
+    }
+}
+
 
 Room* Grid::GetRoomWithMinX() const {
     Room* roomMinX = nullptr;

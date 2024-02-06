@@ -29,6 +29,12 @@ constexpr int STONES_RANGE_END = 26;
 constexpr int OUTER_WORLD_DECOR_START = 54;
 constexpr int OUTER_WORLD_DECOR_END = 55;
 
+constexpr int ROOM_DECOR_START = 40;
+constexpr int ROOM_DECOR_END = 42;
+
+constexpr int LIGHTING_DECOR_START = 27;
+constexpr int LIGHTING_DECOR_END = 29;
+
 //Pickups
 constexpr int KEY_PICKUP_START = 51;
 constexpr int KEY_PICKUP_END = 53;

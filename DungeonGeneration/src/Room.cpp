@@ -83,7 +83,7 @@ void Room::DecorateRoom() const
 
 void Room::DecorateNormalRoom() const
 {
-    int decorAmount = Random::GetRandomRange(2, 5);
+    int decorAmount = Random::GetRandomRange(2, 6);
 
     for (int i = 0; i < decorAmount; i++) {
         Tile* tile = nullptr;
@@ -103,9 +103,18 @@ void Room::DecorateNormalRoom() const
 
         // Check if a valid ground tile was found
         if (tile) {
-            int r = Random::GetRandomRange(STONES_RANGE_START, STONES_RANGE_END);
-            tile->SetTexture(Sprites->at(r));
-            tile->SetTileType(TileType::Decor);
+            if(Random::GetRandomRange(0, 1) == 0)
+            {
+                int r = Random::GetRandomRange(ROOM_DECOR_START, ROOM_DECOR_END);
+                tile->SetTexture(Sprites->at(r));
+                tile->SetTileType(TileType::Pickup);
+            }
+            else
+            {
+                int r = Random::GetRandomRange(LIGHTING_DECOR_START, LIGHTING_DECOR_END);
+                tile->SetTexture(Sprites->at(r));
+                tile->SetTileType(TileType::Pickup);
+            }
         }
     }
 }
