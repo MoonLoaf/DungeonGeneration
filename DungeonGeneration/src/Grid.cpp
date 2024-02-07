@@ -81,37 +81,21 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
     for (int i = roomX; i < roomX + roomWidth; ++i) {
         for (int j = roomY; j < roomY + roomHeight; ++j) {
 
-            if (i == roomX && j == roomY) {
+            if (j == roomY) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(TOP_LEFT_CORNER_SPRITE));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (i == roomX + roomWidth - 1 && j == roomY) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(TOP_RIGHT_CORNER_SPRITE));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (i == roomX && j == roomY + roomHeight - 1) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(BOTTOM_LEFT_CORNER_SPRITE));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (i == roomX + roomWidth - 1 && j == roomY + roomHeight - 1) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(BOTTOM_RIGHT_CORNER_SPRITE));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (j == roomY) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(TOP_WALL_SPRITE));
+                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (j == roomY + roomHeight - 1) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(BOTTOM_WALL_SPRITE));
+                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(LEFT_SIDE_WALL_SPRITE));
+                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else if (i == roomX + roomWidth - 1) {
                 GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(RIGHT_SIDE_WALL_SPRITE));
+                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
                 roomTiles.push_back(&GridTiles[i][j]);
             } else {
                 // Inner part of the room
@@ -173,7 +157,7 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
 
                 if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::None) {
                     GridTiles[x][y].SetTileType(TileType::Wall);
-                    GridTiles[x][y].SetTexture(Sprites->at(24));
+                    GridTiles[x][y].SetTexture(Sprites->at(PLAIN_WALL));
                 }
             }
         }

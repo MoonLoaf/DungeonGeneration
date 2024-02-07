@@ -83,7 +83,7 @@ void Room::DecorateRoom() const
 
 void Room::DecorateNormalRoom() const
 {
-    int decorAmount = Random::GetRandomRange(2, 6);
+    const int decorAmount = RoomTiles.size() / 35;
 
     for (int i = 0; i < decorAmount; i++) {
         Tile* tile = nullptr;
@@ -121,7 +121,7 @@ void Room::DecorateNormalRoom() const
 
 void Room::DecorateBossRoom() const
 {
-    int decorAmount = Random::GetRandomRange(1, 2);
+    const int decorAmount = RoomTiles.size() / 35;
 
     for (int i = 0; i < decorAmount; i++) {
         Tile* tile = nullptr;
@@ -150,7 +150,7 @@ void Room::DecorateBossRoom() const
 
 void Room::DecoratePickupRoom() const
 {
-    int decorAmount = Random::GetRandomRange(1, 2);
+    const int decorAmount = RoomTiles.size() / 35;
 
     for (int i = 0; i < decorAmount; i++) {
         Tile* tile = nullptr;
