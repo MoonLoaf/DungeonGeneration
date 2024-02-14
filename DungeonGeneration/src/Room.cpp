@@ -13,6 +13,11 @@ Room::Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<
 }
 
 
+/**
+ * @brief Retrieves a random non-wall tile from the room.
+ * 
+ * @return Pointer to a Tile object representing a random non-wall tile, or nullptr if no such tile is found.
+ */
 Tile* Room::GetRandomInnerTile() const
 {
     std::vector<Tile*> nonWallTiles;
@@ -33,7 +38,11 @@ Tile* Room::GetRandomInnerTile() const
     return nonWallTiles[randomIndex];
 }
 
-
+/**
+ * @brief Retrieves a random wall tile from the room.
+ * 
+ * @return Pointer to a Tile object representing a random wall tile, or nullptr if no such tile is found.
+ */
 Tile* Room::GetRandomWallTile() const
 {
     std::vector<Tile*> wallTiles;
@@ -51,6 +60,12 @@ Tile* Room::GetRandomWallTile() const
     return nullptr;  // No eligible wall tiles found
 }
 
+/**
+ * @brief Checks if a tile is located at one of the corners of the room.
+ * 
+ * @param tile Pointer to the Tile object to be checked.
+ * @return True if the tile is a corner tile, false otherwise.
+ */
 bool Room::IsCornerTile(const Tile* tile) const
 {
     // Check if the tile is one of the corner tiles
@@ -66,6 +81,9 @@ bool Room::IsCornerTile(const Tile* tile) const
            (tilePos.x == maxX && tilePos.y == maxY);
 }
 
+/**
+ * @brief Decorates the room based on its type.
+ */
 void Room::DecorateRoom() const
 {
     switch (Type) {
@@ -105,7 +123,7 @@ void Room::DecorateNormalRoom() const
         if (tile) {
             if(Random::GetRandomRange(0, 1) == 0)
             {
-                int r = Random::GetRandomRange(ROOM_DECOR_START, ROOM_DECOR_END);
+                const int r = Random::GetRandomRange(ROOM_DECOR_START, ROOM_DECOR_END);
                 tile->SetTexture(Sprites->at(r));
                 tile->SetTileType(TileType::Pickup);
             }
@@ -141,7 +159,7 @@ void Room::DecorateBossRoom() const
 
         // Check if a valid ground tile was found
         if (tile) {
-            int r = Random::GetRandomRange(ENEMY_START, ENEMY_END);
+            const int r = Random::GetRandomRange(ENEMY_START, ENEMY_END);
             tile->SetTexture(Sprites->at(r));
             tile->SetTileType(TileType::Boss);
         }
@@ -178,22 +196,12 @@ void Room::DecoratePickupRoom() const
             }
             else
             {
-                int r = Random::GetRandomRange(KEY_PICKUP_START, KEY_PICKUP_END);
+                const int r = Random::GetRandomRange(KEY_PICKUP_START, KEY_PICKUP_END);
                 tile->SetTexture(Sprites->at(r));
                 tile->SetTileType(TileType::Pickup);
             }
         }
     }
-}
-
-void Room::SetIsConnected(const bool connected)
-{
-    IsConnected = connected;
-}
-
-bool Room::GetIsConnected() const
-{
-    return IsConnected;
 }
 
 std::vector<Tile*> Room::GetRoomTiles()
@@ -210,6 +218,9 @@ RoomType Room::GetRoomType() const
 {
     return Type;
 }
+
+
+//Gets min and max X and Y values of the tiles in the room instance.
 
 int Room::GetMinX() const {
     int minX = std::numeric_limits<int>::max();

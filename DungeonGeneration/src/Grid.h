@@ -15,7 +15,7 @@ public:
     void GenerateRoom(const int minRoomSize, const int maxRoomSize);
     void ConnectRooms();
 
-    [[nodiscard]] bool IsRoomOverlap(int x, int y, int width, int height) const;
+    [[nodiscard]] bool IsRoomOverlap(const int x, const int y, const int width, const int height) const;
 
     std::vector<std::vector<Tile>> GetGridTiles();
     

@@ -19,20 +19,17 @@ public:
 
     [[nodiscard]] Tile* GetRandomInnerTile() const;
 
-    [[nodiscard]] int GetMinX() const;
-    [[nodiscard]] int GetMaxX() const;
-    [[nodiscard]] int GetMinY() const;
-    [[nodiscard]] int GetMaxY() const;
 
     [[nodiscard]] Tile* GetRandomWallTile() const;
 
     bool IsCornerTile(const Tile* tile) const;
 
-    void SetIsConnected(const bool connected);
-
-    [[nodiscard]] bool GetIsConnected() const;
-
     void DecorateRoom() const;
+    
+    [[nodiscard]] int GetMinX() const;
+    [[nodiscard]] int GetMaxX() const;
+    [[nodiscard]] int GetMinY() const;
+    [[nodiscard]] int GetMaxY() const;
 
 private:
 
@@ -41,11 +38,9 @@ private:
     void DecorateBossRoom() const;
     void DecoratePickupRoom() const;
     
-    std::vector<Tile*> RoomTiles;
-    
-    RoomType Type;
-
-    bool IsConnected;
-
     std::shared_ptr<std::vector<SDL_Surface*>> Sprites;
+    
+    std::vector<Tile*> RoomTiles;
+
+    RoomType Type;
 };

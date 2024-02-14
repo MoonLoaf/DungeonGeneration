@@ -178,11 +178,9 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="src\TileLocation.cpp" />
     <ClCompile Include="utils\random.cpp" />
     <ClCompile Include="utils\SDLUtils.cpp" />
     <ClCompile Include="utils\SpriteUtils.cpp" />
-    <ClCompile Include="utils\Vector2.cpp" />
     <ClCompile Include="window\Window.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -273,7 +271,6 @@
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Room.h" />
     <ClInclude Include="src\Tile.h" />
-    <ClInclude Include="src\TileLocation.h" />
     <ClInclude Include="utils\Consts.h" />
     <ClInclude Include="utils\Random.h" />
     <ClInclude Include="utils\RoomType.h" />
@@ -287,8 +284,6 @@
   <ItemGroup>
     <Content Include="assets\img\8x8.png" />
     <Content Include="assets\img\tiles.png" />
-    <Content Include="fonts\futuramedium.ttf" />
-    <Content Include="fonts\lazy.ttf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

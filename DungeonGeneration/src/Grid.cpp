@@ -23,6 +23,14 @@ Grid::Grid(const int width, const int height, const int tileWidth, const int til
     std::srand(rd());
 }
 
+/**
+ * @brief Initializes the grid by creating tiles and generating rooms.
+ * 
+ * Initializes the grid by creating tiles, generating rooms, connecting them, 
+ * generating doors between rooms, and decorating the outer world.
+ * 
+ * @param rooms The number of rooms to generate.
+ */
 void Grid::Initialize(const int rooms)
 {
     GridTiles.reserve(Width);
@@ -48,6 +56,15 @@ void Grid::Initialize(const int rooms)
     DecorateOuterWorld();
 }
 
+/**
+ * @brief Generates a room within the grid.
+ * 
+ * Generates a room with random dimensions and position within the grid, 
+ * assigns tiles to the room, and adds it to the list of rooms.
+ * 
+ * @param minRoomSize The minimum size of the room in tiles.
+ * @param maxRoomSize The maximum size of the room in tiles.
+ */
 void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
 
     const int roomWidth = Random::GetRandomRange(minRoomSize, maxRoomSize);
@@ -118,6 +135,15 @@ void Grid::ConnectRooms() {
     }
 }
 
+/**
+ * @brief Connects two rooms with a path.
+ * 
+ * Connects two rooms by creating a path between them using a simple 
+ * straight-line pathfinding algorithm.
+ * 
+ * @param room1 Pointer to the first room.
+ * @param room2 Pointer to the second room.
+ */
 void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
     const Tile* tile1 = room1->GetRandomInnerTile();
     const Tile* tile2 = room2->GetRandomInnerTile();
@@ -128,13 +154,18 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
     // Simple pathfinding using a straight line
     std::vector<vector2> path;
     vector2 currentPos = startPos;
+    
     while (currentPos != endPos) {
+        // Calculate the horizontal and vertical distances between current position and end position
         const int dx = endPos.x - currentPos.x;
         const int dy = endPos.y - currentPos.y;
 
+        // Determine the direction to move based on the absolute distances
         if (std::abs(dx) > std::abs(dy)) {
+            // If horizontal distance is greater, move horizontally
             currentPos.x += (dx > 0) ? 1 : -1;
         } else {
+            // If vertical distance is greater or equal, move vertically
             currentPos.y += (dy > 0) ? 1 : -1;
         }
 
@@ -151,8 +182,8 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
 
     // Iterate through the path and update neighboring tiles to walls
     for (const vector2& pos : path) {
-        for (int i = -1; i <= 1; ++i) {
-            for (int j = -1; j <= 1; ++j) {
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
                 int x = pos.x + i;
                 int y = pos.y + j;
 
@@ -165,6 +196,12 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
     }
 }
 
+
+/**
+ * @brief Generates doors between connected rooms.
+ * 
+ * Generates entry and exit doors in the dungeon in the rooms with highest and lowest X or Y values in the grid.
+ */
 void Grid::GenerateDoors() const
 {
     // Choose whether to connect rooms with highest and lowest X or Y values
@@ -195,6 +232,11 @@ void Grid::GenerateDoors() const
     }
 }
 
+/**
+ * @brief Decorates the outer world of the grid.
+ * 
+ * Adds decorative elements to the outer world of the grid.
+ */
 void Grid::DecorateOuterWorld()
 {
     for (int i = 0; i < Width; ++i) {
@@ -247,6 +289,10 @@ Room* Grid::GetRoomWithMaxY() const {
     return roomMaxY;
 }
 
+/**
+ * @brief Generated a random roomtype, but makes sure that the dungeon has at least one boss and one pickup-type room.
+ * 
+ */
 RoomType Grid::DecideRoomType() {
     // Generate at least one Boss room
     if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
@@ -268,12 +314,24 @@ RoomType Grid::DecideRoomType() {
     return RoomType::Normal;
 }
 
+/**
+ * @brief Checks if coordinate is valid and inside the Grid.
+ * 
+ */
 bool Grid::IsValidPosition(const int x, const int y) const
 {
     return x >= 0 && x < Width && y >= 0 && y < Height;
 }
 
-bool Grid::IsRoomOverlap(int x, int y, int width, int height) const {
+/**
+ * @brief Checks if tiles in two rooms overlap.
+ *
+ * @param x starting x position of the room | RoomTiles[0][0].
+ * @param y starting y position of the room | RoomTiles[0][0].
+ * @param width width of the room waiting to get generated.
+ * @param height height of the room waiting to get generated.
+ */
+bool Grid::IsRoomOverlap(const int x, const int y, const int width, const int height) const {
     for (int i = x; i < x + width; ++i) {
         for (int j = y; j < y + height; ++j) {
             // Check if the current cell is already occupied
