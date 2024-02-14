@@ -52,6 +52,7 @@ private:
     int TileHeight;
     int xOffset;
     int yOffset;
+    int RoomCount;
     
     SDL_Renderer* Renderer;
     

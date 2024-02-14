@@ -53,16 +53,16 @@ int main(int argc, char* args[])
         if (currentTime - lastInputTime >= INPUT_DELAY_MS) {
             const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
             if (currentKeyStates[SDL_SCANCODE_W]) {
-                grid.GetPlayer()->moveUp();
+                grid.GetPlayer()->Move(vector2(0, -1)); // Move Up
             }
             if (currentKeyStates[SDL_SCANCODE_S]) {
-                grid.GetPlayer()->moveDown();
+                grid.GetPlayer()->Move(vector2(0, 1)); // Move Down
             }
             if (currentKeyStates[SDL_SCANCODE_A]) {
-                grid.GetPlayer()->moveLeft();
+                grid.GetPlayer()->Move(vector2(-1, 0)); // Move Left
             }
             if (currentKeyStates[SDL_SCANCODE_D]) {
-                grid.GetPlayer()->moveRight();
+                grid.GetPlayer()->Move(vector2(1, 0)); // Move Right
             }
             lastInputTime = currentTime; // Update the last input time
         }

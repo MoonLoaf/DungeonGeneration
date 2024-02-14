@@ -33,6 +33,7 @@ Grid::Grid(const int width, const int height, const int tileWidth, const int til
  */
 void Grid::Initialize(const int rooms)
 {
+    RoomCount = rooms;
     GridTiles.reserve(Width);
 
     for (int i = 0; i < Width; ++i) {
@@ -47,7 +48,7 @@ void Grid::Initialize(const int rooms)
         }
     }
 
-    for (int i = 0; i < rooms; i++)
+    for (int i = 0; i < RoomCount; i++)
     {
         GenerateRoom(5, 20);
     }
@@ -401,4 +402,3 @@ Player* Grid::GetPlayer() const
 {
     return CurrentPlayer;
 }
-

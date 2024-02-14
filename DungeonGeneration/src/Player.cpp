@@ -1,37 +1,44 @@
 #include "Grid.h"
 #include "Player.h"
 
-Player::Player(int startX, int startY, Grid* grid) : x(startX), y(startY), gridRef(grid) {}
+Player::Player(int startX, int startY, Grid* grid) : x(startX), y(startY), gridRef(grid), StartPos({startX, startY}) {}
 
- void Player::moveUp() {
-     if (y > 0 && (gridRef->IsValidPosition(x, y - 1)) && 
-         (gridRef->GetTileTypeAt(x, y - 1) == TileType::Ground || gridRef->GetTileTypeAt(x, y - 1) == TileType::Pickup)) {
-         gridRef->UpdatePlayerPosition(x, y, x, y - 1);
-         y--;
-         }
- }
+void Player::Move(const vector2& direction) {
+    int newX = x + direction.x;
+    int newY = y + direction.y;
 
- void Player::moveDown() {
-     if (y < gridRef->GetHeight() - 1 && (gridRef->IsValidPosition(x, y + 1)) && 
-         (gridRef->GetTileTypeAt(x, y + 1) == TileType::Ground || gridRef->GetTileTypeAt(x, y + 1) == TileType::Pickup)) {
-         gridRef->UpdatePlayerPosition(x, y, x, y + 1);
-         y++;
-         }
- }
+    if (gridRef->IsValidPosition(newX, newY)) {
+        const TileType tileType = gridRef->GetTileTypeAt(newX, newY);
+        
+        switch (tileType)
+        {
+            case TileType::Ground:
+                gridRef->UpdatePlayerPosition(x, y, newX, newY);
+                x = newX;
+                y = newY;
+            break;
+            case TileType::Pickup:
+                gridRef->UpdatePlayerPosition(x, y, newX, newY);
+                y = newY;
+                x = newX;
+            break;
+                case TileType::Boss:
+                gridRef->UpdatePlayerPosition(x, y, StartPos.x, StartPos.y);
+                x = StartPos.x;
+                y = StartPos.y;
+            break;
+            case TileType::Door:
+            break;
+            case TileType::None:
+                return;
+            case TileType::Wall:
+                return;
+        }
+    }
+}
 
- void Player::moveLeft() {
-     if (x > 0 && (gridRef->IsValidPosition(x - 1, y)) && 
-         (gridRef->GetTileTypeAt(x - 1, y) == TileType::Ground || gridRef->GetTileTypeAt(x - 1, y) == TileType::Pickup)) {
-         gridRef->UpdatePlayerPosition(x, y, x - 1, y);
-         x--;
-         }
- }
-
- void Player::moveRight() {
-     if (x < gridRef->GetWidth() - 1 && (gridRef->IsValidPosition(x + 1, y)) && 
-         (gridRef->GetTileTypeAt(x + 1, y) == TileType::Ground || gridRef->GetTileTypeAt(x + 1, y) == TileType::Pickup)) {
-         gridRef->UpdatePlayerPosition(x, y, x + 1, y);
-         x++;
-         }
+vector2 Player::GetStartPos() const
+{
+    return StartPos;
 }
 

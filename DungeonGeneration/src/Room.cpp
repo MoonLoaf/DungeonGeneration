@@ -125,13 +125,13 @@ void Room::DecorateNormalRoom() const
             {
                 const int r = Random::GetRandomRange(ROOM_DECOR_START, ROOM_DECOR_END);
                 tile->SetTexture(Sprites->at(r));
-                tile->SetTileType(TileType::Pickup);
+                tile->SetTileType(TileType::Decor);
             }
             else
             {
                 int r = Random::GetRandomRange(LIGHTING_DECOR_START, LIGHTING_DECOR_END);
                 tile->SetTexture(Sprites->at(r));
-                tile->SetTileType(TileType::Pickup);
+                tile->SetTileType(TileType::Decor);
             }
         }
     }
