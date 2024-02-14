@@ -8,14 +8,14 @@
 class Grid
 {
 public:
-    Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* renderer, const std::vector<SDL_Surface*> images, int inXOffset, int inYOffset);
+    Grid(const int width, const int height, const int tileWidth, const int tileHeight, SDL_Renderer* renderer, const std::vector<SDL_Surface*> images, const int inXOffset, const int inYOffset);
 
-    void Initialize(int rooms);
+    void Initialize(const int rooms);
 
     void GenerateRoom(const int minRoomSize, const int maxRoomSize);
     void ConnectRooms();
 
-    bool IsRoomOverlap(int x, int y, int width, int height) const;
+    [[nodiscard]] bool IsRoomOverlap(int x, int y, int width, int height) const;
 
     std::vector<std::vector<Tile>> GetGridTiles();
     
@@ -26,12 +26,12 @@ private:
 
     void DecorateOuterWorld();
 
-    Room* GetRoomWithMinX() const;
-    Room* GetRoomWithMaxX() const;
-    Room* GetRoomWithMinY() const;
-    Room* GetRoomWithMaxY() const;
+    [[nodiscard]] Room* GetRoomWithMinX() const;
+    [[nodiscard]] Room* GetRoomWithMaxX() const;
+    [[nodiscard]] Room* GetRoomWithMinY() const;
+    [[nodiscard]] Room* GetRoomWithMaxY() const;
 
-    bool IsValidPosition(int x, int y) const;
+    [[nodiscard]] bool IsValidPosition(const int x, const int y) const;
 
     RoomType DecideRoomType();
 

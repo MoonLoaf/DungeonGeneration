@@ -6,14 +6,14 @@
 class Tile : public Image
 {
 public:
-    Tile(vector2 position, vector2 scale, const char* newImageURL, SDL_Renderer* renderer, TileType tileType, vector2 gridPos);
-    Tile(vector2 position, vector2 scale, SDL_Surface* Surface, SDL_Renderer* renderer, TileType tileType, vector2 gridPos);
-    
-    TileType GetTileType() const;
+    Tile(const vector2 position, const vector2 scale, const char* newImageURL, SDL_Renderer* renderer, const TileType tileType, const vector2 gridPos);
+    Tile(const vector2 position, const vector2 scale, SDL_Surface* surface, SDL_Renderer* renderer, const TileType tileType, const vector2 gridPos);
 
-    void SetTileType(TileType newType);
+    [[nodiscard]] TileType GetTileType() const;
 
-    vector2 GetGridPos() const;
+    void SetTileType(const TileType newType);
+
+    [[nodiscard]] vector2 GetGridPos() const;
     
 protected:
     TileType Type;

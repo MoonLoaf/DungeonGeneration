@@ -5,7 +5,7 @@
 #include "Room.h"
 #include "../utils/Random.h"
 
-Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* renderer, std::vector<SDL_Surface*> images, int inXOffset, int inYOffset)
+Grid::Grid(const int width, const int height, const int tileWidth, const int tileHeight, SDL_Renderer* renderer, std::vector<SDL_Surface*> images, const int inXOffset, const int inYOffset)
 {
     Width = width;
     Height = height;
@@ -18,11 +18,12 @@ Grid::Grid(int width, int height, int tileWidth, int tileHeight, SDL_Renderer* r
     xOffset = inXOffset;
     yOffset = inYOffset;
 
+    //Get random seed for each startup
     std::random_device rd;
     std::srand(rd());
 }
 
-void Grid::Initialize(int rooms)
+void Grid::Initialize(const int rooms)
 {
     GridTiles.reserve(Width);
 
@@ -205,7 +206,6 @@ void Grid::DecorateOuterWorld()
         }
     }
 }
-
 
 Room* Grid::GetRoomWithMinX() const {
     Room* roomMinX = nullptr;

@@ -9,28 +9,28 @@ class Room
 {
 public:
 
-    Room(std::vector<Tile*> tiles, RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images);
+    Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images);
 
     std::vector<Tile*> GetRoomTiles();
 
-    void SetRoomType(RoomType type);
+    void SetRoomType(const RoomType type);
 
-    RoomType GetRoomType() const;
+    [[nodiscard]] RoomType GetRoomType() const;
 
-    Tile* GetRandomInnerTile() const;
-    
-    int GetMinX() const;
-    int GetMaxX() const;
-    int GetMinY() const;
-    int GetMaxY() const;
+    [[nodiscard]] Tile* GetRandomInnerTile() const;
 
-    Tile* GetRandomWallTile() const;
+    [[nodiscard]] int GetMinX() const;
+    [[nodiscard]] int GetMaxX() const;
+    [[nodiscard]] int GetMinY() const;
+    [[nodiscard]] int GetMaxY() const;
+
+    [[nodiscard]] Tile* GetRandomWallTile() const;
 
     bool IsCornerTile(const Tile* tile) const;
 
-    void SetIsConnected(bool connected);
+    void SetIsConnected(const bool connected);
 
-    bool GetIsConnected() const;
+    [[nodiscard]] bool GetIsConnected() const;
 
     void DecorateRoom() const;
 

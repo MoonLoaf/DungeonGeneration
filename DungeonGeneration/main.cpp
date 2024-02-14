@@ -18,10 +18,12 @@ int main(int argc, char* args[])
     
     // Create Window and Renderer
     const std::unique_ptr<Window> game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, DEEP_PURPLE ,"Dungeon Generation"));
-    SDL_Surface* spriteSheet = IMG_Load(IMG_TILES_URL);
+
     // Load image
+    SDL_Surface* spriteSheet = IMG_Load(IMG_TILES_URL);
     const std::vector<SDL_Surface*> images = SpriteUtils::SliceSpriteSheet(spriteSheet, 12, 8, 8, 8);
-    
+
+    // Initialize the grid
     Grid grid(60, 60, WINDOW_WIDTH / 60, WINDOW_HEIGHT / 60, game_window->renderer, images, 2, 10);
     grid.Initialize(9);
     
@@ -31,7 +33,6 @@ int main(int argc, char* args[])
     // Game Loop (runs until quit)
     while (!quit)
     {
-        // Can be used, to see, how much time in ms has passed since app start
         SDL_GetTicks();
 
         // Loop through all pending events from Windows (OS)
