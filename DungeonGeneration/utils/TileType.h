@@ -9,4 +9,5 @@ enum class TileType
     Boss,
     Pickup,
     None,
+    Player
 };

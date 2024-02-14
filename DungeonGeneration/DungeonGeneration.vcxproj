@@ -103,6 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Room.cpp" />
     <ClCompile Include="src\Tile.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -269,6 +270,7 @@
   <ItemGroup>
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Image.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Room.h" />
     <ClInclude Include="src\Tile.h" />
     <ClInclude Include="utils\Consts.h" />

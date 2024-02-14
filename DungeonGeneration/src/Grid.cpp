@@ -202,7 +202,7 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
  * 
  * Generates entry and exit doors in the dungeon in the rooms with highest and lowest X or Y values in the grid.
  */
-void Grid::GenerateDoors() const
+void Grid::GenerateDoors()
 {
     // Choose whether to connect rooms with highest and lowest X or Y values
     const bool connectByX = Random::GetRandomRange(0, 1) == 0;
@@ -229,6 +229,30 @@ void Grid::GenerateDoors() const
 
         doorTile2->SetTileType(TileType::Door);
         doorTile2->SetTexture(Sprites->at(DOOR_2));
+
+        SpawnPlayerNearDoor(room1, doorTile1);
+    }
+}
+
+void Grid::SpawnPlayerNearDoor(Room* room, const Tile* doorTile) {
+    // Check adjacent tiles for ground tiles
+    for (int xOffset = -1; xOffset <= 1; ++xOffset) {
+        for (int yOffset = -1; yOffset <= 1; ++yOffset) {
+            int x = doorTile->GetGridPos().x + xOffset;
+            int y = doorTile->GetGridPos().y + yOffset;
+
+            // Ensure the adjacent tile is within bounds and is a ground tile
+            if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::Ground) {
+                // Set the player's position to the ground tile adjacent to the door
+
+                CurrentPlayer = new Player(x, y, this);
+                
+                GridTiles[x][y].SetTileType(TileType::Player);
+                GridTiles[x][y].SetTexture(Sprites->at(PLAYER));
+
+                return; // Player spawned, exit the function
+            }
+        }
     }
 }
 
@@ -247,6 +271,16 @@ void Grid::DecorateOuterWorld()
             }
         }
     }
+}
+
+void Grid::UpdatePlayerPosition(int prevX, int prevY, int newX, int newY) {
+    // Set the previous position tile back to its original state
+    GridTiles[prevX][prevY].SetTileType(TileType::Ground);
+    GridTiles[prevX][prevY].SetTexture(Sprites->at(GROUND));
+
+    // Set the new position tile to represent the player
+    GridTiles[newX][newY].SetTileType(TileType::Player);
+    GridTiles[newX][newY].SetTexture(Sprites->at(PLAYER));
 }
 
 Room* Grid::GetRoomWithMinX() const {
@@ -346,5 +380,25 @@ bool Grid::IsRoomOverlap(const int x, const int y, const int width, const int he
 std::vector<std::vector<Tile>> Grid::GetGridTiles()
 {
     return GridTiles;
+}
+
+int Grid::GetHeight() const
+{
+    return Height;
+}
+
+int Grid::GetWidth() const
+{
+    return Width;
+}
+
+TileType Grid::GetTileTypeAt(const int x, const int y) const
+{
+    return GridTiles[x][y].GetTileType();
+}
+
+Player* Grid::GetPlayer() const
+{
+    return CurrentPlayer;
 }
 

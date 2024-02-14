@@ -45,3 +45,5 @@ constexpr int HEALTH_PICKUP_END = 45;
 //Enemies
 constexpr int ENEMY_START = 88; 
 constexpr int ENEMY_END = 95;
+
+constexpr int PLAYER = 87;

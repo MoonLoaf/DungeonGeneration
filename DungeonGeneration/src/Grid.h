@@ -2,6 +2,7 @@
 #include <SDL_render.h>
 #include <vector>
 
+#include "Player.h"
 #include "Room.h"
 #include "Tile.h"
 
@@ -16,13 +17,23 @@ public:
     void ConnectRooms();
 
     [[nodiscard]] bool IsRoomOverlap(const int x, const int y, const int width, const int height) const;
+    [[nodiscard]] bool IsValidPosition(const int x, const int y) const;
 
     std::vector<std::vector<Tile>> GetGridTiles();
-    
+
+    void UpdatePlayerPosition(int prevX, int prevY, int newX, int newY);
+    int GetHeight() const;
+    int GetWidth() const;
+
+    TileType GetTileTypeAt(const int x, const int y) const;
+
+    Player* GetPlayer() const;
+
 private:
     void ConnectTwoRooms(const Room* room1, const Room* room2);
     
-    void GenerateDoors() const;
+    void GenerateDoors();
+    void SpawnPlayerNearDoor(Room* room, const Tile* doorTile);
 
     void DecorateOuterWorld();
 
@@ -31,7 +42,7 @@ private:
     [[nodiscard]] Room* GetRoomWithMinY() const;
     [[nodiscard]] Room* GetRoomWithMaxY() const;
 
-    [[nodiscard]] bool IsValidPosition(const int x, const int y) const;
+    Player* CurrentPlayer;
 
     RoomType DecideRoomType();
 

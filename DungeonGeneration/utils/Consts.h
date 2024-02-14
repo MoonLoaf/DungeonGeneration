@@ -5,7 +5,8 @@ constexpr int WINDOW_HEIGHT = 768;
 constexpr int WINDOW_CENTER_X = WINDOW_WIDTH / 2;
 constexpr int WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
 
-constexpr Uint8 REFRESH_RATE = static_cast<Uint8>(1000.f * 1.f / 60.f);
+constexpr Uint8 REFRESH_RATE = static_cast<Uint8>(1000.f * 1.f / 30.f);
+constexpr Uint8 INPUT_DELAY_MS = static_cast<Uint8>(1000.f * 1.f / 10.f);
 
 constexpr SDL_Color WHITE {255, 255, 255};
 constexpr SDL_Color BLACK {0, 0, 0};

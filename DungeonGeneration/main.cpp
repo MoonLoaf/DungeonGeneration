@@ -31,6 +31,7 @@ int main(int argc, char* args[])
     bool quit = false;
 
     // Game Loop (runs until quit)
+    Uint32 lastInputTime = SDL_GetTicks();
     while (!quit)
     {
         SDL_GetTicks();
@@ -43,7 +44,27 @@ int main(int argc, char* args[])
                 case SDL_QUIT: {
                     quit = true;
                 } break;
+            default: ;
             }
+        }
+
+        // Handle player movement
+        Uint32 currentTime = SDL_GetTicks();
+        if (currentTime - lastInputTime >= INPUT_DELAY_MS) {
+            const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
+            if (currentKeyStates[SDL_SCANCODE_W]) {
+                grid.GetPlayer()->moveUp();
+            }
+            if (currentKeyStates[SDL_SCANCODE_S]) {
+                grid.GetPlayer()->moveDown();
+            }
+            if (currentKeyStates[SDL_SCANCODE_A]) {
+                grid.GetPlayer()->moveLeft();
+            }
+            if (currentKeyStates[SDL_SCANCODE_D]) {
+                grid.GetPlayer()->moveRight();
+            }
+            lastInputTime = currentTime; // Update the last input time
         }
         
         game_window->Clear();
