@@ -1,6 +1,6 @@
 #include "SDLUtils.h"
 #include <SDL.h>
-#include <stdio.h>
+#include <cstdio>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
