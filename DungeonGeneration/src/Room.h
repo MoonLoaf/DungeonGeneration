@@ -11,8 +11,6 @@ public:
 
     Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images, class Grid* grid);
 
-    ~Room() = default; 
-
     std::vector<Tile*> GetRoomTiles();
 
     void SetRoomType(const RoomType type);

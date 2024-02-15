@@ -2,7 +2,6 @@
 #include "Player.h"
 #include <SDL.h>
 
-
 Player::Player(int startX, int startY, Grid* grid) : x(startX), y(startY), gridRef(grid), StartPos({startX, startY}) {}
 
 void Player::Move(const vector2& direction) {

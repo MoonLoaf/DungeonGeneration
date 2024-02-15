@@ -52,7 +52,7 @@ void Grid::Initialize(const int rooms)
     {
         GenerateRoom(5, 20);
     }
-    ConnectRooms();
+    ConnectAllRooms();
     GenerateDoors();
     for (auto room : Rooms)
     {
@@ -133,7 +133,7 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
     Rooms.push_back(newRoom);
 }
 
-void Grid::ConnectRooms() {
+void Grid::ConnectAllRooms() {
     for (size_t i = 0; i < Rooms.size() - 1; ++i) {
         ConnectTwoRooms(Rooms[i], Rooms[i + 1]);
     }
@@ -343,8 +343,8 @@ Room* Grid::GetRoomWithMaxY() const {
 }
 
 /**
- * @brief Generated a random roomtype, but makes sure that the dungeon has at least one boss and one pickup-type room.
- * 
+ * @brief Generates a random RoomType Enum, but makes sure that the dungeon has
+ * at least one boss, one pickup-type room and a room containing the necessary key.
  */
 RoomType Grid::DecideRoomType() {
     // Generate at least one KeyPickup room
@@ -359,7 +359,7 @@ RoomType Grid::DecideRoomType() {
     })) {
         return RoomType::Boss;
     }
-    // Generate at least one Pickup roomswww
+    // Generate at least one Pickup rooms
     if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
         return room->GetRoomType() == RoomType::Pickup;
     })) {
