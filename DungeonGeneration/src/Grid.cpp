@@ -100,35 +100,27 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
         }
     } while (IsRoomOverlap(roomX, roomY, roomWidth, roomHeight));
 
+    // Lambda function to set wall tiles
+    auto SetWallTile = [&](int i, int j) {
+        GridTiles[i][j].SetTileType(TileType::Wall);
+        GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
+        roomTiles.push_back(&GridTiles[i][j]);
+    };
+
     // Assign tiles to the room
     for (int i = roomX; i < roomX + roomWidth; ++i) {
         for (int j = roomY; j < roomY + roomHeight; ++j) {
-
-            if (j == roomY) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (j == roomY + roomHeight - 1) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (i == roomX) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
-                roomTiles.push_back(&GridTiles[i][j]);
-            } else if (i == roomX + roomWidth - 1) {
-                GridTiles[i][j].SetTileType(TileType::Wall);
-                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
-                roomTiles.push_back(&GridTiles[i][j]);
+            if (j == roomY || j == roomY + roomHeight - 1 || i == roomX || i == roomX + roomWidth - 1) {
+                SetWallTile(i, j);
             } else {
-                // Inner part of the room
-                const int randomIndex = Random::GetRandomRange(6, 7);
+                const int r = Random::GetRandomRange(6, 7);
                 GridTiles[i][j].SetTileType(TileType::Ground);
-                GridTiles[i][j].SetTexture(Sprites->at(randomIndex));
+                GridTiles[i][j].SetTexture(Sprites->at(r));
                 roomTiles.push_back(&GridTiles[i][j]);
             }
         }
     }
+    
     Room* newRoom = new Room(roomTiles, type, Sprites, this);
     Rooms.push_back(newRoom);
 }

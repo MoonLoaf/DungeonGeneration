@@ -32,7 +32,7 @@ public:
 
 private:
     
-    void GenerateRoom(const int minRoomSize, const int maxRoomSize); 
+    void GenerateRoom(const int minRoomSize, const int maxRoomSize);
     void ConnectAllRooms();
     void ConnectTwoRooms(const Room* room1, const Room* room2);
     void GenerateDoors();
