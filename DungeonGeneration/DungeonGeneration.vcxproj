@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\Image.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -268,12 +269,14 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameManager.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Room.h" />
     <ClInclude Include="src\Tile.h" />
     <ClInclude Include="utils\Consts.h" />
+    <ClInclude Include="utils\ExitColor.h" />
     <ClInclude Include="utils\Random.h" />
     <ClInclude Include="utils\RoomType.h" />
     <ClInclude Include="utils\SDLUtils.h" />
@@ -285,7 +288,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\img\8x8.png" />
-    <Content Include="assets\img\tiles.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

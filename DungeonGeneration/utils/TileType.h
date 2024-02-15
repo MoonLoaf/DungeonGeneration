@@ -4,10 +4,15 @@ enum class TileType
 {
     Ground,
     Wall,
-    Door,
+    DoorEntry,
+    DoorExitLocked,
+    DoorExitOpen,
     Decor,
     Boss,
     Pickup,
+    RedKey,
+    BlueKey,
+    YellowKey,
     None,
     Player
 };

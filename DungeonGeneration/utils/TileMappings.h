@@ -16,7 +16,9 @@ constexpr int GROUND = 7;
 
 //Doors and stairs
 constexpr int DOOR_1 = 5;
-constexpr int DOOR_2 = 13;
+constexpr int DOOR_YELLOW = 11;
+constexpr int DOOR_BLUE = 12;
+constexpr int DOOR_RED = 13;
 
 constexpr int STAIR_1 = 30;
 constexpr int STAIR_2 = 31;
@@ -36,8 +38,9 @@ constexpr int LIGHTING_DECOR_START = 27;
 constexpr int LIGHTING_DECOR_END = 29;
 
 //Pickups
-constexpr int KEY_PICKUP_START = 51;
-constexpr int KEY_PICKUP_END = 53;
+constexpr int KEY_YELLOW = 51;
+constexpr int KEY_BLUE = 52;
+constexpr int KEY_RED = 53;
 
 constexpr int HEALTH_PICKUP_START = 43;
 constexpr int HEALTH_PICKUP_END = 45;

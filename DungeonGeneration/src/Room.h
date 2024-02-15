@@ -9,7 +9,9 @@ class Room
 {
 public:
 
-    Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images);
+    Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images, class Grid* grid);
+
+    ~Room() = default; 
 
     std::vector<Tile*> GetRoomTiles();
 
@@ -37,10 +39,13 @@ private:
     void DecorateNormalRoom() const;
     void DecorateBossRoom() const;
     void DecoratePickupRoom() const;
+    void DecorateKeyRoom() const;
     
     std::shared_ptr<std::vector<SDL_Surface*>> Sprites;
     
     std::vector<Tile*> RoomTiles;
 
     RoomType Type;
+
+    Grid* GridPtr;
 };

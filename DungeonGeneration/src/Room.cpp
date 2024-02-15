@@ -2,14 +2,17 @@
 
 #include <utility>
 
+#include "Grid.h"
+#include "../utils/ExitColor.h"
 #include "../utils/Random.h"
 #include "../utils/TileMappings.h"
 
-Room::Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images)
+Room::Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images, Grid* grid)
 {
-    RoomTiles = std::move(tiles);
+    RoomTiles = tiles;
     Type = type;
     Sprites = images;
+    GridPtr = grid;  
 }
 
 
@@ -95,6 +98,9 @@ void Room::DecorateRoom() const
             break;
         case RoomType::Pickup:
             DecoratePickupRoom();
+            break;
+        case RoomType::KeyPickup:
+            DecorateKeyRoom();
             break;
     }
 }
@@ -186,23 +192,105 @@ void Room::DecoratePickupRoom() const
             attempts++;
         }
 
-        // Check if a valid ground tile was found
         if (tile) {
-            if(Random::GetRandomRange(0, 1) == 0)
-            {
-                int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_START);
+            if (Random::GetRandomRange(0, 1) == 0) {
+                // Decorate with health pickups
+                int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_END);
                 tile->SetTexture(Sprites->at(r));
                 tile->SetTileType(TileType::Pickup);
-            }
-            else
-            {
-                const int r = Random::GetRandomRange(KEY_PICKUP_START, KEY_PICKUP_END);
-                tile->SetTexture(Sprites->at(r));
+            } else {
+                ExitColor exitColor = GridPtr->GetDungeonExitColor();
+                int keyTextureIndex;
+
+                // Randomly select a key color that is different from the exit color
+                do {
+                    // Adjust the range as needed to exclude the exit type
+                    keyTextureIndex = Random::GetRandomRange(KEY_RED, KEY_YELLOW);
+                } while (keyTextureIndex == static_cast<int>(exitColor));
+                
+                tile->SetTexture(Sprites->at(keyTextureIndex));
                 tile->SetTileType(TileType::Pickup);
             }
         }
     }
 }
+
+void Room::DecorateKeyRoom() const
+{
+    Tile* keyTile = nullptr;
+    int attempts = 0;
+
+    // Keep trying until a valid ground tile is found or maximum attempts are reached
+    while (attempts < 50) {
+        keyTile = GetRandomInnerTile();
+        
+        // Check if a valid ground tile is found
+        if (keyTile && keyTile->GetTileType() == TileType::Ground) {
+            break;
+        }
+
+        attempts++;
+    }
+
+    // Check if a valid ground tile was found
+    if (keyTile) {
+        ExitColor exitColor = GridPtr->GetDungeonExitColor();
+
+        // Assign the key texture index based on the exit color
+        switch (exitColor)
+        {
+            case ExitColor::RedExit:
+                keyTile->SetTexture(Sprites->at(KEY_RED));
+                keyTile->SetTileType(TileType::RedKey);
+                break;
+            case ExitColor::BlueExit:
+                keyTile->SetTexture(Sprites->at(KEY_BLUE));
+                keyTile->SetTileType(TileType::BlueKey);
+                break;
+            case ExitColor::YellowExit:
+                keyTile->SetTexture(Sprites->at(KEY_YELLOW));
+                keyTile->SetTileType(TileType::YellowKey);
+                break;
+            default:
+            break;
+        }
+    }
+
+    // Decorate the room with other pickups and decorations
+    const int decorAmount = RoomTiles.size() / 35;
+
+    for (int i = 0; i < decorAmount; i++) {
+        Tile* tile = nullptr;
+        int attempts = 0;
+
+        // Keep trying until a valid ground tile is found or maximum attempts are reached
+        while (attempts < 10) {
+            tile = GetRandomInnerTile();
+            
+            // Check if a valid ground tile is found
+            if (tile && tile->GetTileType() == TileType::Ground) {
+                break;
+            }
+
+            attempts++;
+        }
+
+        // Check if a valid ground tile was found
+        if (tile) {
+            // Decorate the tile with pickups or other decorations
+            if (Random::GetRandomRange(0, 1) == 0) {
+                int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_END);
+                tile->SetTexture(Sprites->at(r));
+                tile->SetTileType(TileType::Pickup);
+            } else {
+                const int r = Random::GetRandomRange(ROOM_DECOR_START, ROOM_DECOR_END);
+                tile->SetTexture(Sprites->at(r));
+                tile->SetTileType(TileType::Pickup); // Change to appropriate tile type
+            }
+        }
+    }
+}
+
 
 std::vector<Tile*> Room::GetRoomTiles()
 {

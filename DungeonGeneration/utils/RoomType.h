@@ -5,4 +5,5 @@ enum class RoomType
     Normal,
     Boss,
     Pickup,
+    KeyPickup
 };

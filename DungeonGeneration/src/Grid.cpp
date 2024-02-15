@@ -54,6 +54,10 @@ void Grid::Initialize(const int rooms)
     }
     ConnectRooms();
     GenerateDoors();
+    for (auto room : Rooms)
+    {
+        room->DecorateRoom();
+    }
     DecorateOuterWorld();
 }
 
@@ -125,9 +129,8 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
             }
         }
     }
-    Room* newRoom = new Room(roomTiles, type, Sprites);
+    Room* newRoom = new Room(roomTiles, type, Sprites, this);
     Rooms.push_back(newRoom);
-    newRoom->DecorateRoom();
 }
 
 void Grid::ConnectRooms() {
@@ -225,11 +228,26 @@ void Grid::GenerateDoors()
     Tile* doorTile2 = room2->GetRandomWallTile();
 
     if (doorTile1 && doorTile2) {
-        doorTile1->SetTileType(TileType::Door);
+        doorTile1->SetTileType(TileType::DoorEntry);
         doorTile1->SetTexture(Sprites->at(DOOR_1)); 
 
-        doorTile2->SetTileType(TileType::Door);
-        doorTile2->SetTexture(Sprites->at(DOOR_2));
+        doorTile2->SetTileType(TileType::DoorExitLocked);
+        int r = Random::GetRandomRange(DOOR_YELLOW, DOOR_RED);
+        doorTile2->SetTexture(Sprites->at(r));
+        ExitDoorTile = doorTile2;
+
+        switch (r)
+        {
+        case DOOR_YELLOW:
+            ExitDoorColor = ExitColor::YellowExit;
+            break;
+        case DOOR_BLUE:
+            ExitDoorColor = ExitColor::BlueExit;
+            break;
+        case DOOR_RED:
+            ExitDoorColor = ExitColor::RedExit;
+            break;
+        }
 
         SpawnPlayerNearDoor(room1, doorTile1);
     }
@@ -329,21 +347,34 @@ Room* Grid::GetRoomWithMaxY() const {
  * 
  */
 RoomType Grid::DecideRoomType() {
+    // Generate at least one KeyPickup room
+    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
+        return room->GetRoomType() == RoomType::KeyPickup;
+    })) {
+        return RoomType::KeyPickup;
+    }
     // Generate at least one Boss room
     if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
         return room->GetRoomType() == RoomType::Boss;
     })) {
         return RoomType::Boss;
     }
-    // Generate at least one Pickup room
+    // Generate at least one Pickup roomswww
     if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
         return room->GetRoomType() == RoomType::Pickup;
     })) {
         return RoomType::Pickup;
     }
-    // 25% chance for any other room to be Boss or Pickup
+    // 25% chance for any other room to be Boss, Pickup, or KeyPickup
     if (Random::GetRandomRange(1, 100) <= 25) {
-        return Random::GetRandomRange(1, 2) == 1 ? RoomType::Boss : RoomType::Pickup;
+        int randValue = Random::GetRandomRange(1, 3);
+        if (randValue == 1) {
+            return RoomType::Boss;
+        } else if (randValue == 2) {
+            return RoomType::Pickup;
+        } else {
+            return RoomType::KeyPickup;
+        }
     }
     // Else normal room
     return RoomType::Normal;
@@ -401,4 +432,14 @@ TileType Grid::GetTileTypeAt(const int x, const int y) const
 Player* Grid::GetPlayer() const
 {
     return CurrentPlayer;
+}
+
+void Grid::UnlockExit() const
+{
+    ExitDoorTile->SetTileType(TileType::DoorExitOpen);
+}
+
+ExitColor Grid::GetDungeonExitColor() const
+{
+    return ExitDoorColor;
 }

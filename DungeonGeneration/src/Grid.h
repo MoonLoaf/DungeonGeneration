@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Room.h"
 #include "Tile.h"
+#include "../utils/ExitColor.h"
 
 class Grid
 {
@@ -28,6 +29,10 @@ public:
     TileType GetTileTypeAt(const int x, const int y) const;
 
     Player* GetPlayer() const;
+
+    void UnlockExit() const;
+
+    ExitColor GetDungeonExitColor() const;
 
 private:
     void ConnectTwoRooms(const Room* room1, const Room* room2);
@@ -53,6 +58,9 @@ private:
     int xOffset;
     int yOffset;
     int RoomCount;
+
+    Tile* ExitDoorTile;
+    ExitColor ExitDoorColor;
     
     SDL_Renderer* Renderer;
     
