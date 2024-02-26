@@ -9,7 +9,7 @@
 
 Room::Room(std::vector<Tile*> tiles, const RoomType type, const std::shared_ptr<std::vector<SDL_Surface*>>& images, Grid* grid)
 {
-    RoomTiles = tiles;
+    RoomTiles = std::move(tiles);
     Type = type;
     Sprites = images;
     GridPtr = grid;  
@@ -37,8 +37,8 @@ Tile* Room::GetRandomInnerTile() const
     }
 
     // Randomly select a non-wall tile
-    int randomIndex = Random::GetRandomRange(0, nonWallTiles.size() - 1);
-    return nonWallTiles[randomIndex];
+    const int r = Random::GetRandomRange(0, nonWallTiles.size() - 1);
+    return nonWallTiles[r];
 }
 
 /**
@@ -56,8 +56,8 @@ Tile* Room::GetRandomWallTile() const
     }
 
     if (!wallTiles.empty()) {
-        int randomIndex = Random::GetRandomRange(0, wallTiles.size() - 1);
-        return wallTiles[randomIndex];
+        const int r = Random::GetRandomRange(0, wallTiles.size() - 1);
+        return wallTiles[r];
     }
 
     return nullptr;  // No eligible wall tiles found
@@ -72,11 +72,11 @@ Tile* Room::GetRandomWallTile() const
 bool Room::IsCornerTile(const Tile* tile) const
 {
     // Check if the tile is one of the corner tiles
-    vector2 tilePos = tile->GetGridPos();
-    int minX = GetMinX();
-    int maxX = GetMaxX();
-    int minY = GetMinY();
-    int maxY = GetMaxY();
+    const vector2 tilePos = tile->GetGridPos();
+    const int minX = GetMinX();
+    const int maxX = GetMaxX();
+    const int minY = GetMinY();
+    const int maxY = GetMaxY();
 
     return (tilePos.x == minX && tilePos.y == minY) ||
            (tilePos.x == maxX && tilePos.y == minY) ||
@@ -135,7 +135,7 @@ void Room::DecorateNormalRoom() const
             }
             else
             {
-                int r = Random::GetRandomRange(LIGHTING_DECOR_START, LIGHTING_DECOR_END);
+                const int r = Random::GetRandomRange(LIGHTING_DECOR_START, LIGHTING_DECOR_END);
                 tile->SetTexture(Sprites->at(r));
                 tile->SetTileType(TileType::Decor);
             }
@@ -181,7 +181,7 @@ void Room::DecoratePickupRoom() const
         int attempts = 0;
 
         // Keep trying until a valid ground tile is found or maximum attempts are reached
-        while (attempts < 10) {
+        while (attempts < 20) {
             tile = GetRandomInnerTile();
             
             // Check if a valid ground tile is found
@@ -195,7 +195,7 @@ void Room::DecoratePickupRoom() const
         if (tile) {
             if (Random::GetRandomRange(0, 1) == 0) {
                 // Decorate with health pickups
-                int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_END);
+                const int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_END);
                 tile->SetTexture(Sprites->at(r));
                 tile->SetTileType(TileType::Pickup);
             } else {
@@ -204,7 +204,6 @@ void Room::DecoratePickupRoom() const
 
                 // Randomly select a key color that is different from the exit color
                 do {
-                    // Adjust the range as needed to exclude the exit type
                     keyTextureIndex = Random::GetRandomRange(KEY_RED, KEY_YELLOW);
                 } while (keyTextureIndex == static_cast<int>(exitColor));
                 
@@ -251,8 +250,6 @@ void Room::DecorateKeyRoom() const
                 keyTile->SetTexture(Sprites->at(KEY_YELLOW));
                 keyTile->SetTileType(TileType::YellowKey);
                 break;
-            default:
-            break;
         }
     }
 
@@ -279,13 +276,13 @@ void Room::DecorateKeyRoom() const
         if (tile) {
             // Decorate the tile with pickups or other decorations
             if (Random::GetRandomRange(0, 1) == 0) {
-                int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_END);
+                const int r = Random::GetRandomRange(HEALTH_PICKUP_START, HEALTH_PICKUP_END);
                 tile->SetTexture(Sprites->at(r));
                 tile->SetTileType(TileType::Pickup);
             } else {
                 const int r = Random::GetRandomRange(ROOM_DECOR_START, ROOM_DECOR_END);
                 tile->SetTexture(Sprites->at(r));
-                tile->SetTileType(TileType::Pickup); // Change to appropriate tile type
+                tile->SetTileType(TileType::Pickup);
             }
         }
     }

@@ -54,7 +54,7 @@ void Grid::Initialize(const int rooms)
     }
     ConnectAllRooms();
     GenerateDoors();
-    for (auto room : Rooms)
+    for (const auto room : Rooms)
     {
         room->DecorateRoom();
     }
@@ -180,8 +180,8 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
     for (const vector2& pos : path) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                int x = pos.x + i;
-                int y = pos.y + j;
+                const int x = pos.x + i;
+                const int y = pos.y + j;
 
                 if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::None) {
                     GridTiles[x][y].SetTileType(TileType::Wall);
@@ -224,7 +224,7 @@ void Grid::GenerateDoors()
         doorTile1->SetTexture(Sprites->at(DOOR_1)); 
 
         doorTile2->SetTileType(TileType::DoorExitLocked);
-        int r = Random::GetRandomRange(DOOR_YELLOW, DOOR_RED);
+        const int r = Random::GetRandomRange(DOOR_YELLOW, DOOR_RED);
         doorTile2->SetTexture(Sprites->at(r));
         ExitDoorTile = doorTile2;
 
@@ -249,8 +249,8 @@ void Grid::SpawnPlayerNearDoor(Room* room, const Tile* doorTile) {
     // Check adjacent tiles for ground tiles
     for (int xOffset = -1; xOffset <= 1; ++xOffset) {
         for (int yOffset = -1; yOffset <= 1; ++yOffset) {
-            int x = doorTile->GetGridPos().x + xOffset;
-            int y = doorTile->GetGridPos().y + yOffset;
+            const int x = doorTile->GetGridPos().x + xOffset;
+            const int y = doorTile->GetGridPos().y + yOffset;
 
             // Ensure the adjacent tile is within bounds and is a ground tile
             if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::Ground) {
@@ -261,7 +261,7 @@ void Grid::SpawnPlayerNearDoor(Room* room, const Tile* doorTile) {
                 GridTiles[x][y].SetTileType(TileType::Player);
                 GridTiles[x][y].SetTexture(Sprites->at(PLAYER));
 
-                return; // Player spawned, exit the function
+                return;
             }
         }
     }
@@ -359,10 +359,10 @@ RoomType Grid::DecideRoomType() {
     }
     // 25% chance for any other room to be Boss, Pickup, or KeyPickup
     if (Random::GetRandomRange(1, 100) <= 25) {
-        int randValue = Random::GetRandomRange(1, 3);
-        if (randValue == 1) {
+        const int r = Random::GetRandomRange(1, 3);
+        if (r == 1) {
             return RoomType::Boss;
-        } else if (randValue == 2) {
+        } else if (r == 2) {
             return RoomType::Pickup;
         } else {
             return RoomType::KeyPickup;
