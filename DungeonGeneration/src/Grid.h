@@ -13,6 +13,8 @@ public:
     Grid(const int width, const int height, const int tileWidth, const int tileHeight, SDL_Renderer* renderer, const std::vector<SDL_Surface*> images, const int inXOffset, const int inYOffset);
 
     void Initialize(const int rooms);
+
+    void RenderGrid() const;
     
     [[nodiscard]] bool IsValidPosition(const int x, const int y) const;
 

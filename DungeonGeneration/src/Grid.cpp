@@ -61,6 +61,17 @@ void Grid::Initialize(const int rooms)
     DecorateOuterWorld();
 }
 
+void Grid::RenderGrid() const
+{
+    for (const auto& row : GridTiles)
+    {
+        for (auto tile : row)
+        {
+            tile.Draw();
+        }
+    }
+}
+
 /**
  * @brief Generates a room within the grid.
  * 

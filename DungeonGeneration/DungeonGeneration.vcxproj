@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Grid.cpp" />
     <ClCompile Include="src\Image.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -270,6 +271,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameManager.h" />
+    <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Player.h" />

@@ -68,11 +68,7 @@ void GameManager::StartGameLoop()
         GameWindow->Clear();
 
         // Render all tiles in the grid
-        for (std::vector<Tile>& row : grid.GetGridTiles()) {
-            for (Tile& tile : row) {
-                SDL_RenderCopy(GameWindow->renderer, tile.GetTexture(), nullptr, tile.GetRect());
-            }
-        }
+        grid.RenderGrid();   
 
         GameWindow->Present();
 

@@ -1,6 +1,11 @@
 #include "Image.h"
 #include <SDL_image.h>
 
+void Image::Draw()
+{
+    SDL_RenderCopy(Renderer, Texture, nullptr, Rect);
+}
+
 Image::Image(vector2 position, vector2 scale, const char* newImageURL, SDL_Renderer* renderer) {
     Rect = new SDL_Rect{position.x, position.y, scale.x, scale.y};
     Renderer = renderer;
