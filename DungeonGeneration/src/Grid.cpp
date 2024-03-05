@@ -267,7 +267,7 @@ void Grid::SpawnPlayerNearDoor(Room* room, const Tile* doorTile) {
             if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::Ground) {
                 // Set the player's position to the ground tile adjacent to the door
 
-                CurrentPlayer = new Player(x, y, this);
+                CurrentPlayer = std::make_unique<Player>(x, y, this);
                 
                 GridTiles[x][y].SetTileType(TileType::Player);
                 GridTiles[x][y].SetTexture(Sprites->at(PLAYER));
@@ -432,11 +432,6 @@ TileType Grid::GetTileTypeAt(const int x, const int y) const
     return GridTiles[x][y].GetTileType();
 }
 
-Player* Grid::GetPlayer() const
-{
-    return CurrentPlayer;
-}
-
 void Grid::UnlockExit() const
 {
     ExitDoorTile->SetTileType(TileType::DoorExitOpen);
@@ -445,4 +440,9 @@ void Grid::UnlockExit() const
 ExitColor Grid::GetDungeonExitColor() const
 {
     return ExitDoorColor;
+}
+
+void Grid::MovePlayer(vector2 direction) const
+{
+    CurrentPlayer->Move(direction);
 }

@@ -51,16 +51,16 @@ void GameManager::StartGameLoop()
         if (currentTime - lastInputTime >= INPUT_DELAY_MS) {
             const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
             if (currentKeyStates[SDL_SCANCODE_W]) {
-                grid.GetPlayer()->Move(vector2(0, -1)); // Move Up
+                grid.MovePlayer(vector2(0, -1)); // Move Up
             }
             if (currentKeyStates[SDL_SCANCODE_S]) {
-                grid.GetPlayer()->Move(vector2(0, 1)); // Move Down
+                grid.MovePlayer(vector2(0, 1)); // Move Down
             }
             if (currentKeyStates[SDL_SCANCODE_A]) {
-                grid.GetPlayer()->Move(vector2(-1, 0)); // Move Left
+                grid.MovePlayer(vector2(-1, 0)); // Move Left
             }
             if (currentKeyStates[SDL_SCANCODE_D]) {
-                grid.GetPlayer()->Move(vector2(1, 0)); // Move Right
+                grid.MovePlayer(vector2(1, 0)); // Move Right
             }
             lastInputTime = currentTime; // Update the last input time
         }

@@ -26,11 +26,11 @@ public:
 
     TileType GetTileTypeAt(const int x, const int y) const;
 
-    Player* GetPlayer() const;
-
     void UnlockExit() const;
 
     ExitColor GetDungeonExitColor() const;
+
+    void MovePlayer(vector2 direction) const;
 
 private:
     
@@ -50,7 +50,7 @@ private:
     [[nodiscard]] Room* GetRoomWithMinY() const;
     [[nodiscard]] Room* GetRoomWithMaxY() const;
 
-    Player* CurrentPlayer;
+    std::unique_ptr<Player> CurrentPlayer;
 
     int Width;
     int Height;
