@@ -111,20 +111,15 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
         }
     } while (IsRoomOverlap(roomX, roomY, roomWidth, roomHeight));
 
-    // Lambda function to set wall tiles
-    auto SetWallTile = [&](int i, int j) {
-        GridTiles[i][j].SetTileType(TileType::Wall);
-        GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
-        roomTiles.push_back(&GridTiles[i][j]);
-    };
-
     // Assign tiles to the room
     for (int i = roomX; i < roomX + roomWidth; ++i) {
         for (int j = roomY; j < roomY + roomHeight; ++j) {
             if (j == roomY || j == roomY + roomHeight - 1 || i == roomX || i == roomX + roomWidth - 1) {
-                SetWallTile(i, j);
+                GridTiles[i][j].SetTileType(TileType::Wall);
+                GridTiles[i][j].SetTexture(Sprites->at(PLAIN_WALL));
+                roomTiles.push_back(&GridTiles[i][j]);
             } else {
-                const int r = Random::GetRandomRange(6, 7);
+                const int r = Random::GetRandomRange(GROUND_1, GROUND_2);
                 GridTiles[i][j].SetTileType(TileType::Ground);
                 GridTiles[i][j].SetTexture(Sprites->at(r));
                 roomTiles.push_back(&GridTiles[i][j]);
@@ -180,7 +175,7 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
         if (IsValidPosition(currentPos.x, currentPos.y) && !IsKeyTile(&GridTiles[currentPos.x][currentPos.y])) {
             path.push_back(currentPos);  // Add the current position to the path
             GridTiles[currentPos.x][currentPos.y].SetTileType(TileType::Ground);
-            GridTiles[currentPos.x][currentPos.y].SetTexture(Sprites->at(GROUND));
+            GridTiles[currentPos.x][currentPos.y].SetTexture(Sprites->at(GROUND_2));
         } else {
             // If the current position is out of bounds, break the loop
             break;
@@ -303,7 +298,7 @@ void Grid::DecorateOuterWorld()
 void Grid::UpdatePlayerPosition(int prevX, int prevY, int newX, int newY) {
     // Set the previous position tile back to its original state
     GridTiles[prevX][prevY].SetTileType(TileType::Ground);
-    GridTiles[prevX][prevY].SetTexture(Sprites->at(GROUND));
+    GridTiles[prevX][prevY].SetTexture(Sprites->at(GROUND_2));
 
     // Set the new position tile to represent the player
     GridTiles[newX][newY].SetTileType(TileType::Player);

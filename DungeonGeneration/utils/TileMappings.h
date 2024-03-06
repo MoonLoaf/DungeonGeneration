@@ -12,7 +12,8 @@ constexpr int BOTTOM_WALL_SPRITE = 17;
 constexpr int LEFT_SIDE_WALL_SPRITE = 8;
 constexpr int RIGHT_SIDE_WALL_SPRITE = 10;
 constexpr int PLAIN_WALL = 21;
-constexpr int GROUND = 7;
+constexpr int GROUND_1 = 6;
+constexpr int GROUND_2 = 7;
 
 //Doors and stairs
 constexpr int DOOR_1 = 5;
