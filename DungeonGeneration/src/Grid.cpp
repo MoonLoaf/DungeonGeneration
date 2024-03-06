@@ -52,12 +52,12 @@ void Grid::Initialize(const int rooms)
     {
         GenerateRoom(5, 20);
     }
-    ConnectAllRooms();
     GenerateDoors();
     for (const auto room : Rooms)
     {
         room->DecorateRoom();
     }
+    ConnectAllRooms();
     DecorateOuterWorld();
 }
 
@@ -177,7 +177,7 @@ void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
         }
 
         // Check if the current position is within the valid range
-        if (IsValidPosition(currentPos.x, currentPos.y)) {
+        if (IsValidPosition(currentPos.x, currentPos.y) && !IsKeyTile(&GridTiles[currentPos.x][currentPos.y])) {
             path.push_back(currentPos);  // Add the current position to the path
             GridTiles[currentPos.x][currentPos.y].SetTileType(TileType::Ground);
             GridTiles[currentPos.x][currentPos.y].SetTexture(Sprites->at(GROUND));
@@ -276,6 +276,11 @@ void Grid::SpawnPlayerNearDoor(Room* room, const Tile* doorTile) {
             }
         }
     }
+}
+
+bool Grid::IsKeyTile(const Tile* tile)
+{
+    return tile->GetTileType() == TileType::BlueKey || tile->GetTileType() == TileType::YellowKey || tile->GetTileType() == TileType::RedKey;
 }
 
 /**

@@ -39,6 +39,7 @@ private:
     void ConnectTwoRooms(const Room* room1, const Room* room2);
     void GenerateDoors();
     void SpawnPlayerNearDoor(Room* room, const Tile* doorTile);
+    bool IsKeyTile(const Tile* tile);
     RoomType DecideRoomType();
     
     [[nodiscard]] bool IsRoomOverlap(const int x, const int y, const int width, const int height) const;
