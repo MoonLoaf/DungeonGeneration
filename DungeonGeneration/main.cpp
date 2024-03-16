@@ -14,9 +14,9 @@ int main(int argc, char* args[])
     SDLUtils::InitializeSDL();
     
     // Create Window and Renderer
-    Window* game_window(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, DEEP_PURPLE ,"Dungeon Generation"));
+    auto gameWindow = std::make_shared<Window>(WINDOW_WIDTH, WINDOW_HEIGHT, DEEP_PURPLE, "Dungeon Generation");
 
-    GameManager* gameManager = new GameManager(game_window);
+    const auto gameManager = std::make_unique<GameManager>(gameWindow);
     gameManager->StartGameLoop();
 
     return 0;

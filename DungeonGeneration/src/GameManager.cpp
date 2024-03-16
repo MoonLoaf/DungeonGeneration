@@ -10,7 +10,7 @@
 #include "../window/Window.h"
 
 
-GameManager::GameManager(Window* window)
+GameManager::GameManager(std::shared_ptr<Window> window)
 {
     GameWindow = window;
 }

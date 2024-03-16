@@ -1,16 +1,18 @@
 #pragma once
 
+#include <memory>
+
 #include "../window/Window.h"
 
 class GameManager
 {
 public:
-    GameManager(Window* window);
+    GameManager(std::shared_ptr<Window> window);
 
     void StartGameLoop();
 
 private:
-    Window* GameWindow;
+    std::shared_ptr<Window> GameWindow;
 
     bool quitGame;
 };

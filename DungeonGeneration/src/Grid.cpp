@@ -252,10 +252,10 @@ void Grid::GenerateDoors()
 
 void Grid::SpawnPlayerNearDoor(std::unique_ptr<Room> room, const Tile* doorTile) {
     // Check adjacent tiles for ground tiles
-    for (int xOffset = -1; xOffset <= 1; ++xOffset) {
-        for (int yOffset = -1; yOffset <= 1; ++yOffset) {
-            const int x = doorTile->GetGridPos().x + xOffset;
-            const int y = doorTile->GetGridPos().y + yOffset;
+    for (int xPlayerOffset = -1; xPlayerOffset <= 1; ++xPlayerOffset) {
+        for (int yPlayerOffset = -1; yPlayerOffset <= 1; ++yPlayerOffset) {
+            const int x = doorTile->GetGridPos().x + xPlayerOffset;
+            const int y = doorTile->GetGridPos().y + yPlayerOffset;
 
             // Ensure the adjacent tile is within bounds and is a ground tile
             if (IsValidPosition(x, y) && GridTiles[x][y].GetTileType() == TileType::Ground) {
@@ -294,7 +294,7 @@ void Grid::DecorateOuterWorld()
     }
 }
 
-void Grid::UpdatePlayerPosition(int prevX, int prevY, int newX, int newY) {
+void Grid::UpdatePlayerPosition(const int prevX, const int prevY, const int newX, const int newY) {
     // Set the previous position tile back to its original state
     GridTiles[prevX][prevY].SetTileType(TileType::Ground);
     GridTiles[prevX][prevY].SetTexture(Sprites->at(GROUND_2));
