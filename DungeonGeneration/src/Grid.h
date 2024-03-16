@@ -36,9 +36,9 @@ private:
     
     void GenerateRoom(const int minRoomSize, const int maxRoomSize);
     void ConnectAllRooms();
-    void ConnectTwoRooms(const Room* room1, const Room* room2);
+    void ConnectTwoRooms(const std::unique_ptr<Room>& room1, const std::unique_ptr<Room>& room2);
     void GenerateDoors();
-    void SpawnPlayerNearDoor(Room* room, const Tile* doorTile);
+    void SpawnPlayerNearDoor(std::unique_ptr<Room> room, const Tile* doorTile);
     bool IsKeyTile(const Tile* tile);
     RoomType DecideRoomType();
     
@@ -46,10 +46,10 @@ private:
 
     void DecorateOuterWorld();
 
-    [[nodiscard]] Room* GetRoomWithMinX() const;
-    [[nodiscard]] Room* GetRoomWithMaxX() const;
-    [[nodiscard]] Room* GetRoomWithMinY() const;
-    [[nodiscard]] Room* GetRoomWithMaxY() const;
+    [[nodiscard]] std::unique_ptr<Room> GetRoomWithMinX() const;
+    [[nodiscard]] std::unique_ptr<Room> GetRoomWithMaxX() const;
+    [[nodiscard]] std::unique_ptr<Room> GetRoomWithMinY() const;
+    [[nodiscard]] std::unique_ptr<Room> GetRoomWithMaxY() const;
 
     std::unique_ptr<Player> CurrentPlayer;
 
@@ -68,5 +68,5 @@ private:
     
     std::vector<std::vector<Tile>> GridTiles;
     std::shared_ptr<std::vector<SDL_Surface*>> Sprites;
-    std::vector<Room*> Rooms;
+    std::vector<std::unique_ptr<Room>> Rooms;
 };

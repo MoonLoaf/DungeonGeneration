@@ -53,7 +53,7 @@ void Grid::Initialize(const int rooms)
         GenerateRoom(5, 20);
     }
     GenerateDoors();
-    for (const auto room : Rooms)
+    for (const auto& room : Rooms)
     {
         room->DecorateRoom();
     }
@@ -127,8 +127,7 @@ void Grid::GenerateRoom(const int minRoomSize, const int maxRoomSize) {
         }
     }
     
-    Room* newRoom = new Room(roomTiles, type, Sprites, this);
-    Rooms.push_back(newRoom);
+    Rooms.push_back(std::make_unique<Room>(roomTiles, type, Sprites, this));
 }
 
 void Grid::ConnectAllRooms() {
@@ -146,7 +145,7 @@ void Grid::ConnectAllRooms() {
  * @param room1 Pointer to the first room.
  * @param room2 Pointer to the second room.
  */
-void Grid::ConnectTwoRooms(const Room* room1, const Room* room2) {
+void Grid::ConnectTwoRooms(const std::unique_ptr<Room>& room1, const std::unique_ptr<Room>& room2) {
     const Tile* tile1 = room1->GetRandomInnerTile();
     const Tile* tile2 = room2->GetRandomInnerTile();
 
@@ -210,15 +209,15 @@ void Grid::GenerateDoors()
     const bool connectByX = Random::GetRandomRange(0, 1) == 0;
 
     // Find rooms with highest and lowest X or Y values
-    Room* room1;
-    Room* room2;
+    std::unique_ptr<Room> room1;
+    std::unique_ptr<Room> room2;
 
     if (connectByX) {
-        room1 = GetRoomWithMinX();
-        room2 = GetRoomWithMaxX();
+        room1 = std::move(GetRoomWithMinX());
+        room2 = std::move(GetRoomWithMaxX());
     } else {
-        room1 = GetRoomWithMinY();
-        room2 = GetRoomWithMaxY();
+        room1 = std::move(GetRoomWithMinY());
+        room2 = std::move(GetRoomWithMaxY());
     }
 
     // Replace a random wall tile in each room with a door sprite
@@ -247,11 +246,11 @@ void Grid::GenerateDoors()
             break;
         }
 
-        SpawnPlayerNearDoor(room1, doorTile1);
+        SpawnPlayerNearDoor(std::move(room1), doorTile1);
     }
 }
 
-void Grid::SpawnPlayerNearDoor(Room* room, const Tile* doorTile) {
+void Grid::SpawnPlayerNearDoor(std::unique_ptr<Room> room, const Tile* doorTile) {
     // Check adjacent tiles for ground tiles
     for (int xOffset = -1; xOffset <= 1; ++xOffset) {
         for (int yOffset = -1; yOffset <= 1; ++yOffset) {
@@ -305,41 +304,41 @@ void Grid::UpdatePlayerPosition(int prevX, int prevY, int newX, int newY) {
     GridTiles[newX][newY].SetTexture(Sprites->at(PLAYER));
 }
 
-Room* Grid::GetRoomWithMinX() const {
-    Room* roomMinX = nullptr;
-    for (Room* room : Rooms) {
+std::unique_ptr<Room> Grid::GetRoomWithMinX() const {
+    std::unique_ptr<Room> roomMinX = nullptr;
+    for (const auto& room : Rooms) {
         if (!roomMinX || room->GetMinX() < roomMinX->GetMinX()) {
-            roomMinX = room;
+            roomMinX = std::make_unique<Room>(*room);
         }
     }
     return roomMinX;
 }
 
-Room* Grid::GetRoomWithMaxX() const {
-    Room* roomMaxX = nullptr;
-    for (Room* room : Rooms) {
+std::unique_ptr<Room> Grid::GetRoomWithMaxX() const {
+    std::unique_ptr<Room> roomMaxX = nullptr;
+    for (const auto& room : Rooms) {
         if (!roomMaxX || room->GetMaxX() > roomMaxX->GetMaxX()) {
-            roomMaxX = room;
+            roomMaxX = std::make_unique<Room>(*room);
         }
     }
     return roomMaxX;
 }
 
-Room* Grid::GetRoomWithMinY() const {
-    Room* roomMinY = nullptr;
-    for (Room* room : Rooms) {
+std::unique_ptr<Room> Grid::GetRoomWithMinY() const {
+    std::unique_ptr<Room> roomMinY = nullptr;
+    for (const auto& room : Rooms) {
         if (!roomMinY || room->GetMinY() < roomMinY->GetMinY()) {
-            roomMinY = room;
+            roomMinY = std::make_unique<Room>(*room);
         }
     }
     return roomMinY;
 }
 
-Room* Grid::GetRoomWithMaxY() const {
-    Room* roomMaxY = nullptr;
-    for (Room* room : Rooms) {
+std::unique_ptr<Room> Grid::GetRoomWithMaxY() const {
+    std::unique_ptr<Room> roomMaxY = nullptr;
+    for (const auto& room : Rooms) {
         if (!roomMaxY || room->GetMaxY() > roomMaxY->GetMaxY()) {
-            roomMaxY = room;
+            roomMaxY = std::make_unique<Room>(*room);
         }
     }
     return roomMaxY;
@@ -351,19 +350,19 @@ Room* Grid::GetRoomWithMaxY() const {
  */
 RoomType Grid::DecideRoomType() {
     // Generate at least one KeyPickup room
-    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
+    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const std::unique_ptr<Room>& room) {
         return room->GetRoomType() == RoomType::KeyPickup;
     })) {
         return RoomType::KeyPickup;
     }
     // Generate at least one Boss room
-    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
+    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const std::unique_ptr<Room>& room) {
         return room->GetRoomType() == RoomType::Boss;
     })) {
         return RoomType::Boss;
     }
     // Generate at least one Pickup rooms
-    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const Room* room) {
+    if (Rooms.empty() || std::ranges::none_of(Rooms, [](const std::unique_ptr<Room>& room) {
         return room->GetRoomType() == RoomType::Pickup;
     })) {
         return RoomType::Pickup;
